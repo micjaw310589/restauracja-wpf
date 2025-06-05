@@ -6,6 +6,11 @@ namespace restauracja_wpf.Data
 {
     public class RestaurantContext : DbContext
     {
+        public RestaurantContext(DbContextOptions options) : base(options)
+        {
+
+        }
+
         public DbSet<Dish> Menu { get; set; }
         public DbSet<DishOrder> DishOrders { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -18,12 +23,6 @@ namespace restauracja_wpf.Data
         public DbSet<Table> Tables { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=RestaurantDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
-        
-            base.OnConfiguring(optionsBuilder);
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

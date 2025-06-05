@@ -5,7 +5,7 @@ using System.Security.Claims;
 namespace restauracja_wpf.Models
 {
     [Table("Users")]
-    public class User
+    public class User : DomainObject
     {
         public int UserId { get; set; }
 

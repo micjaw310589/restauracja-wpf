@@ -10,8 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Data\" />
+    <Folder Include="Nowy folder\" />
   </ItemGroup>
 
   <ItemGroup>

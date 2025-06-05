@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace restauracja_wpf.Models
 {
     [Table("RegularClients")]
-    public class RegularClient
+    public class RegularClient : DomainObject
     {
         public int RegularClientId { get; set; }
 

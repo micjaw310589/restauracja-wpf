@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace restauracja_wpf.Models
 {
     [Table("Discounts")]
-    public class Discount
+    public class Discount : DomainObject
     {
         public int DiscountId { get; set; }
 

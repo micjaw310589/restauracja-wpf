@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace restauracja_wpf.Models
 {
     [Table("Status")]
-    public class OrderStatus
+    public class OrderStatus : DomainObject
     {
         [Column(TypeName = "tinyint")]
         public sbyte StatusId { get; set; }

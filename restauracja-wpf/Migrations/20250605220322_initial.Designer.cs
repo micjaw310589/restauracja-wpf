@@ -12,8 +12,8 @@ using restauracja_wpf.Data;
 namespace restauracja_wpf.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    [Migration("20250527230025_Initial")]
-    partial class Initial
+    [Migration("20250605220322_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

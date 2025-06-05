@@ -3,7 +3,7 @@
 namespace restauracja_wpf.Models
 {
     [Table("Tables")]
-    public class Table
+    public class Table : DomainObject
     {
         public int TableId { get; set; }
 

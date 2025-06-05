@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace restauracja_wpf.Models
 {
     [Table("Roles")]
-    public class Role
+    public class Role : DomainObject
     {
         public int RoleId { get; set; }
 

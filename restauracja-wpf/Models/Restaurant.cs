@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace restauracja_wpf.Models
 {
     [Table("Restaurants")]
-    public class Restaurant
+    public class Restaurant : DomainObject
     {
         public int RestaurantId { get; set; }
 

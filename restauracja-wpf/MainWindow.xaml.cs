@@ -8,16 +8,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using restauracja_wpf.Data;
+using restauracja_wpf.Models;
+using restauracja_wpf.Services;
 
 namespace restauracja_wpf;
-
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow : Window
 {
     public MainWindow()
     {
         InitializeComponent();
+        IDataService<User> userService = new GenericDataService<User>(new RestaurantContextFactory());
+        userService.Create(new User
+        {
+            FirstName = "Jan",
+            LastName = "Kowalski"
+        }).Wait();
     }
+
 }

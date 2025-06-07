@@ -6,7 +6,7 @@ namespace restauracja_wpf.Models
     [Table("Reservations")]
     public class Reservation : DomainObject
     {
-        public int ReservationId { get; set; }
+        //public int ReservationId { get; set; }
 
         [MaxLength(20)]
         public string LastName { get; set; } = "";

@@ -5,7 +5,7 @@ namespace restauracja_wpf.Models
     [Table("Tables")]
     public class Table : DomainObject
     {
-        public int TableId { get; set; }
+        //public int TableId { get; set; }
 
         public int RestaurantId { get; set; }
         public Restaurant? Restaurant { get; set; } = null;

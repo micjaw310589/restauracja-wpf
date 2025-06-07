@@ -6,8 +6,8 @@ namespace restauracja_wpf.Models
     [Table("Status")]
     public class OrderStatus : DomainObject
     {
-        [Column(TypeName = "tinyint")]
-        public sbyte StatusId { get; set; }
+        //[Column(TypeName = "tinyint")]
+        //public sbyte StatusId { get; set; }
 
         [MaxLength(15)]
         public string Name { get; set; } = "";

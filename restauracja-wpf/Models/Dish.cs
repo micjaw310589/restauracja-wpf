@@ -6,7 +6,7 @@ namespace restauracja_wpf.Models
     [Table("Menu")]
     public class Dish : DomainObject
     {
-        public int DishId { get; set; }
+        //public int DishId { get; set; }
 
         [MaxLength(20)]
         public string Name { get; set; } = "";

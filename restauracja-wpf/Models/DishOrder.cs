@@ -6,7 +6,7 @@ namespace restauracja_wpf.Models
     [Table("Menu_Orders")]
     public class DishOrder : DomainObject
     {
-        public int OrderId { get; set; }
+        //public int OrderId { get; set; }
         public Order Order { get; set; } = null!;
 
         public int DishId { get; set; }

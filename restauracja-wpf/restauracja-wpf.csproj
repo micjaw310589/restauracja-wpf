@@ -10,7 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Nowy folder\" />
+    <Compile Remove="Nowy folder\**" />
+    <EmbeddedResource Remove="Nowy folder\**" />
+    <None Remove="Nowy folder\**" />
+    <Page Remove="Nowy folder\**" />
   </ItemGroup>
 
   <ItemGroup>

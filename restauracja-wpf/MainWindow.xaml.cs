@@ -18,12 +18,17 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        IDataService<User> userService = new GenericDataService<User>(new RestaurantContextFactory());
-        userService.Create(new User
-        {
-            FirstName = "Jan",
-            LastName = "Kowalski"
-        }).Wait();
     }
 
+    private async void Button_Click(object sender, RoutedEventArgs e)
+    {
+        IDataService<Role> roleService = new GenericDataService<Role>(new RestaurantContextFactory());
+        //var result = await roleService.Create(new Role
+        //{
+        //    Name = "Kucharz"
+        //});
+
+        var result = await roleService.GetAll();
+        MessageBox.Show(result.ElementAt(0).Name + " " + result.ElementAt(1).Name);
+    }
 }

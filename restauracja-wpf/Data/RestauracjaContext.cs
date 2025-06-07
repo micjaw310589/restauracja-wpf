@@ -27,15 +27,15 @@ namespace restauracja_wpf.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Dish>()
-                .HasKey(d => d.DishId);
+                .HasKey(d => d.Id);
 
             modelBuilder.Entity<DishOrder>()
-                .HasKey(dor => new { dor.OrderId, dor.DishId });
+                .HasKey(dor => new { dor.Id, dor.DishId });
 
             modelBuilder.Entity<DishOrder>()
                 .HasOne(dor => dor.Order)
                 .WithMany(o => o.DishOrders)
-                .HasForeignKey(dor => dor.OrderId);
+                .HasForeignKey(dor => dor.Id);
 
             modelBuilder.Entity<DishOrder>()
                 .HasOne(dor => dor.Dish)
@@ -43,7 +43,7 @@ namespace restauracja_wpf.Data
                 .HasForeignKey(dor => dor.DishId);
 
             modelBuilder.Entity<Order>()
-                .HasKey(o => o.OrderId);
+                .HasKey(o => o.Id);
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Status)
@@ -56,10 +56,10 @@ namespace restauracja_wpf.Data
                 .HasForeignKey(o => o.RegularCustomerId);
 
             modelBuilder.Entity<OrderStatus>()
-                .HasKey(os => os.StatusId);
+                .HasKey(os => os.Id);
 
             modelBuilder.Entity<RegularClient>()
-                .HasKey(rc => rc.RegularClientId);
+                .HasKey(rc => rc.Id);
 
             modelBuilder.Entity<RegularClient>()
                 .HasOne(rc => rc.Discount)
@@ -67,13 +67,13 @@ namespace restauracja_wpf.Data
                 .HasForeignKey(rc => rc.DiscountId);
 
             modelBuilder.Entity<Discount>()
-                .HasKey(d => d.DiscountId);
+                .HasKey(d => d.Id);
 
             modelBuilder.Entity<User>()
-                .HasKey(u => u.UserId);
+                .HasKey(u => u.Id);
 
             modelBuilder.Entity<Role>()
-                .HasKey(r => r.RoleId);
+                .HasKey(r => r.Id);
 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Role)
@@ -81,7 +81,7 @@ namespace restauracja_wpf.Data
                 .HasForeignKey(u => u.RoleId);
 
             modelBuilder.Entity<Reservation>()
-                .HasKey(r => r.ReservationId);
+                .HasKey(r => r.Id);
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Reservation)
@@ -89,7 +89,7 @@ namespace restauracja_wpf.Data
                 .HasForeignKey(o => o.ReservationId);
 
             modelBuilder.Entity<Table>()
-                .HasKey(t => t.TableId);
+                .HasKey(t => t.Id);
 
             modelBuilder.Entity<Table>()
                 .HasMany(t => t.Reservations)
@@ -102,7 +102,7 @@ namespace restauracja_wpf.Data
                 .UsingEntity(j => j.ToTable("Orders_Tables"));
 
             modelBuilder.Entity<Restaurant>()
-                .HasKey(r => r.RestaurantId);
+                .HasKey(r => r.Id);
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)

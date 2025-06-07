@@ -6,7 +6,7 @@ namespace restauracja_wpf.Models
     [Table("Roles")]
     public class Role : DomainObject
     {
-        public int RoleId { get; set; }
+        //public int RoleId { get; set; }
 
         [MaxLength(15)]
         public string Name { get; set; } = "";

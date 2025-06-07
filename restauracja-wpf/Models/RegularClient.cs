@@ -6,7 +6,7 @@ namespace restauracja_wpf.Models
     [Table("RegularClients")]
     public class RegularClient : DomainObject
     {
-        public int RegularClientId { get; set; }
+        //public int RegularClientId { get; set; }
 
         [MaxLength(15)]
         public string FirstName { get; set; } = "";

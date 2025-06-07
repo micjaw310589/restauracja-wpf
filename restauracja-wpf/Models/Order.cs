@@ -6,7 +6,7 @@ namespace restauracja_wpf.Models
     [Table("Orders")]
     public class Order : DomainObject
     {
-        public int OrderId { get; set; }
+        //public int OrderId { get; set; }
 
         public int UserId { get; set; }
         public User? User { get; set; } = null;
@@ -28,8 +28,8 @@ namespace restauracja_wpf.Models
         [Column(TypeName = "tinyint")]
         public sbyte? DeliveryNumber { get; set; } = null;
 
-        [Column(TypeName = "tinyint")]
-        public sbyte StatusId { get; set; }
+        //[Column(TypeName = "tinyint")]
+        public int StatusId { get; set; }
         public OrderStatus Status { get; set; } = null!;
 
         public List<DishOrder> DishOrders { get; set; } = new List<DishOrder>();

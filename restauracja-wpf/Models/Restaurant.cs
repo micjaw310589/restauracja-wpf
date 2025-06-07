@@ -6,7 +6,7 @@ namespace restauracja_wpf.Models
     [Table("Restaurants")]
     public class Restaurant : DomainObject
     {
-        public int RestaurantId { get; set; }
+        //public int RestaurantId { get; set; }
 
         [MaxLength(30)]
         public string Name { get; set; } = "";

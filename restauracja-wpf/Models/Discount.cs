@@ -6,7 +6,7 @@ namespace restauracja_wpf.Models
     [Table("Discounts")]
     public class Discount : DomainObject
     {
-        public int DiscountId { get; set; }
+        //public int DiscountId { get; set; }
 
         [MaxLength(15)]
         public string LevelName { get; set; } = "";

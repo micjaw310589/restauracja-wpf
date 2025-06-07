@@ -7,7 +7,7 @@ namespace restauracja_wpf.Models
     [Table("Users")]
     public class User : DomainObject
     {
-        public int UserId { get; set; }
+        //public int UserId { get; set; }
 
         [MaxLength(20)]
         public string Login { get; set; } = "";

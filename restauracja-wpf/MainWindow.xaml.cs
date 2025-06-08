@@ -19,7 +19,17 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        FillUpComboBox();
     }
 
-    
+    private async void FillUpComboBox()
+    {
+        IDataService<Role> roleService = new GenericDataService<Role>(new RestaurantContextFactory());
+        cmbRole.ItemsSource = await roleService.GetAll();
+        cmbRole.DisplayMemberPath = "Name";
+        cmbRole.SelectedValuePath = "Id";
+        cmbRole.SelectedIndex = 0;
+    }
+
 }

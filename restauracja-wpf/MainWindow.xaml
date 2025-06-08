@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:restauracja_wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="600">
+        Title="MainWindow" Height="500" Width="600">
     <Grid>
         <TabControl>
             <TabItem x:Name="tabMain" Header="Main Page">
@@ -32,6 +32,10 @@
                             <PasswordBox x:Name="txtConfirmPassword" Width="120" HorizontalAlignment="Left"/>
                             <Label Content="Role"/>
                             <ComboBox x:Name="cmbRole" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding}"/>
+                            <Label Content="Restaurant"/>
+                            <ComboBox x:Name="cmbRestaurant" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding}"/>
+                            <Label></Label>
+                            <Button x:Name="btnAddUser" Content="Add User" Click="btnAddUser_Click"/>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox x:Name="grpUserUpdateDelete" Grid.Column="1" Header="Modify User"/>

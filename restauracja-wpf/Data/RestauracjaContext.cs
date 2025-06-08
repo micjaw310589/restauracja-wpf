@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EntityFrameworkCore.EncryptColumn.Extension;
+using EntityFrameworkCore.EncryptColumn.Interfaces;
+using EntityFrameworkCore.EncryptColumn.Util;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using restauracja_wpf.Models;
 
@@ -6,9 +9,11 @@ namespace restauracja_wpf.Data
 {
     public class RestaurantContext : DbContext
     {
+        private readonly IEncryptionProvider _provider;
+
         public RestaurantContext(DbContextOptions options) : base(options)
         {
-
+            this._provider = new GenerateEncryptionProvider("dupa1234dupa1234dupa1234dupa1234");
         }
 
         public DbSet<Dish> Menu { get; set; }
@@ -26,6 +31,8 @@ namespace restauracja_wpf.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseEncryption(_provider);
+
             modelBuilder.Entity<Dish>()
                 .HasKey(d => d.Id);
 

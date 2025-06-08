@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EntityFrameworkCore.EncryptColumn.Attribute;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Claims;
 
@@ -12,6 +13,7 @@ namespace restauracja_wpf.Models
         [MaxLength(20)]
         public string Login { get; set; } = "";
 
+        [EncryptColumn]
         [MaxLength(50)]
         public string PasswordHash { get; set; } = "";
 

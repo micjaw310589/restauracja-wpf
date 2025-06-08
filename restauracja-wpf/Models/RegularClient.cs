@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EntityFrameworkCore.EncryptColumn.Attribute;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace restauracja_wpf.Models
@@ -14,9 +15,11 @@ namespace restauracja_wpf.Models
         [MaxLength(20)]
         public string LastName { get; set; } = "";
 
+        [EncryptColumn]
         [MaxLength(12)]
         public string? PhoneNumber { get; set; } = null;
 
+        [EncryptColumn]
         [MaxLength(10)]
         public string? Email { get; set; } = null;
 

@@ -21,16 +21,5 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    public async void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (tabUserManagement.IsSelected)
-        {
-            IDataService<Role> roleService = new GenericDataService<Role>(new RestaurantContextFactory());
-            var result = roleService.GetAll().Result;
-            cmbRole.ItemsSource = result;
-            cmbRole.DisplayMemberPath = result.ElementAt(0).Name;
-            cmbRole.SelectedValuePath = Convert.ToString(result.ElementAt(0).Id);
-            cmbRole.SelectedIndex = 0;
-        }
-    }
+    
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -20,15 +21,16 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    private async void Button_Click(object sender, RoutedEventArgs e)
+    public async void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        IDataService<Role> roleService = new GenericDataService<Role>(new RestaurantContextFactory());
-        //var result = await roleService.Create(new Role
-        //{
-        //    Name = "Kucharz"
-        //});
-
-        var result = await roleService.GetAll();
-        MessageBox.Show(result.ElementAt(0).Name + " " + result.ElementAt(1).Name);
+        if (tabUserManagement.IsSelected)
+        {
+            IDataService<Role> roleService = new GenericDataService<Role>(new RestaurantContextFactory());
+            var result = roleService.GetAll().Result;
+            cmbRole.ItemsSource = result;
+            cmbRole.DisplayMemberPath = result.ElementAt(0).Name;
+            cmbRole.SelectedValuePath = Convert.ToString(result.ElementAt(0).Id);
+            cmbRole.SelectedIndex = 0;
+        }
     }
 }

@@ -5,8 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:restauracja_wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="400" Width="600">
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="400,227,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <TabControl>
+            <TabItem x:Name="tabMain" Header="Main Page">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem x:Name="tabUserManagement" Header="User Management" Height="22" Margin="-2,0,-2,0" VerticalAlignment="Bottom">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid/>
+                    <GroupBox x:Name="grpUserCreate" Header="Create User">
+                        <StackPanel>
+                            <Label Content="Firstname:"/>
+                            <TextBox x:Name="txtFirstname" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <Label Content="Lastname:"/>
+                            <TextBox x:Name="txtLastname" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <Label Content="Login:"/>
+                            <TextBox x:Name="txtLogin" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <Label Content="Password:"/>
+                            <TextBox x:Name="txtPassword" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <Label Content="Confirm Password:"/>
+                            <TextBox x:Name="txtConfirmPassword" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <Label Content="Role"/>
+                            <ComboBox x:Name="cmbRole" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding}"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox x:Name="grpUserUpdateDelete" Grid.Column="1" Header="Modify User"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

@@ -27,9 +27,9 @@
                             <Label Content="Login:"/>
                             <TextBox x:Name="txtLogin" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
                             <Label Content="Password:"/>
-                            <TextBox x:Name="txtPassword" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <PasswordBox x:Name="txtPassword"  Width="120" HorizontalAlignment="Left"/>
                             <Label Content="Confirm Password:"/>
-                            <TextBox x:Name="txtConfirmPassword" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <PasswordBox x:Name="txtConfirmPassword" Width="120" HorizontalAlignment="Left"/>
                             <Label Content="Role"/>
                             <ComboBox x:Name="cmbRole" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding}"/>
                         </StackPanel>

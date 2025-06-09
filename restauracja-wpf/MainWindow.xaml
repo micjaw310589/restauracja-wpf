@@ -21,24 +21,41 @@
                     <GroupBox x:Name="grpUserCreate" Header="Create User">
                         <StackPanel>
                             <Label Content="Firstname:"/>
-                            <TextBox x:Name="txtFirstname" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="txtFirstname" TextWrapping="Wrap" Width="120" MaxLength="20" HorizontalAlignment="Left"/>
                             <Label Content="Lastname:"/>
-                            <TextBox x:Name="txtLastname" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="txtLastname" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
                             <Label Content="Login:"/>
                             <TextBox x:Name="txtLogin" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
                             <Label Content="Password:"/>
-                            <PasswordBox x:Name="txtPassword"  Width="120" HorizontalAlignment="Left"/>
+                            <PasswordBox x:Name="txtPassword"  Width="120" HorizontalAlignment="Left" MaxLength="30"/>
                             <Label Content="Confirm Password:"/>
-                            <PasswordBox x:Name="txtConfirmPassword" Width="120" HorizontalAlignment="Left"/>
-                            <Label Content="Role"/>
+                            <PasswordBox x:Name="txtConfirmPassword" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
+                            <Label Content="Role:"/>
                             <ComboBox x:Name="cmbRole" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding}"/>
-                            <Label Content="Restaurant"/>
+                            <Label Content="Restaurant:"/>
                             <ComboBox x:Name="cmbRestaurant" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding}"/>
                             <Label></Label>
                             <Button x:Name="btnAddUser" Content="Add User" Click="btnAddUser_Click"/>
                         </StackPanel>
                     </GroupBox>
-                    <GroupBox x:Name="grpUserUpdateDelete" Grid.Column="1" Header="Modify User"/>
+                    <GroupBox x:Name="grpUserUpdateDelete" Grid.Column="1" Header="Modify User">
+                        <StackPanel>
+                            <Label Content="Search by lastname:"/>
+                            <TextBox x:Name="txtSearchUser" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
+                            <Label></Label>
+                            <Button x:Name="btnSearchUser" Content="Search" Click="btnSearchUser_ClickAsync"/>
+                            <Label></Label>
+                            <ListBox x:Name="lbxUserSearchResults" Height="100" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="OnSelected"/>
+                            <Label Content="Change password:"/>
+                            <PasswordBox x:Name="txtChangePassword"  Width="120" HorizontalAlignment="Left" MaxLength="30"/>
+                            <Label Content="Confirm change password:"/>
+                            <PasswordBox x:Name="txtConfirmChangePassword" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
+                            <Label></Label>
+                            <Button x:Name="btnChangePassword" Content="Change Password"/>
+                            <Label></Label>
+                            <Button x:Name="btnDeleteUser" Content="Delete User"/>
+                        </StackPanel>
+                    </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>

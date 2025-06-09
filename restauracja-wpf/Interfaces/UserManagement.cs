@@ -14,10 +14,16 @@ namespace restauracja_wpf.Interfaces
     public class UserManagement
     {
         private readonly GenericDataService<User> _userService;
+        private User _user = new();
 
         public UserManagement(GenericDataService<User> userService)
         {
             _userService = userService;
+        }
+
+        public UserManagement(GenericDataService<User> userService, User user) : this(userService)
+        {
+            _user = user;
         }
 
         public async void AddUser(string firstname, string lastname, string login, string password, string restaurant, string role)
@@ -44,7 +50,6 @@ namespace restauracja_wpf.Interfaces
                     RestaurantId = foundRestaurant.Id
                 });
             }
-
         }
 
         public async Task<IEnumerable<User>> GetMatchingUsers(string lastname)
@@ -58,5 +63,22 @@ namespace restauracja_wpf.Interfaces
                 return foundUsers;
             }
         }
+
+        public async void UpdatePassword(int id, User entity)
+        {
+            using (var context = new RestaurantContextFactory().CreateDbContext())
+            {
+                var existing = await context.Set<User>().FindAsync(id);
+                if (existing == null)
+                    throw new Exception("Entity not found");
+
+                if (existing is User user && entity is User updatedUser)
+                {
+                    user.PasswordHash = updatedUser.PasswordHash;
+                }
+
+                await context.SaveChangesAsync();
+            }
+        }   
     }
 }

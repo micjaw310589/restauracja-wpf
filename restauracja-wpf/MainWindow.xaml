@@ -45,15 +45,15 @@
                             <Label></Label>
                             <Button x:Name="btnSearchUser" Content="Search" Click="btnSearchUser_ClickAsync"/>
                             <Label></Label>
-                            <ListBox x:Name="lbxUserSearchResults" Height="100" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="OnSelected"/>
+                            <ListBox x:Name="lbxUserSearchResults" Height="100" d:ItemsSource="{d:SampleData ItemCount=5}"/>
                             <Label Content="Change password:"/>
                             <PasswordBox x:Name="txtChangePassword"  Width="120" HorizontalAlignment="Left" MaxLength="30"/>
                             <Label Content="Confirm change password:"/>
                             <PasswordBox x:Name="txtConfirmChangePassword" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
                             <Label></Label>
-                            <Button x:Name="btnChangePassword" Content="Change Password"/>
+                            <Button x:Name="btnChangePassword" Content="Change Password" Click="btnChangePassword_Click"/>
                             <Label></Label>
-                            <Button x:Name="btnDeleteUser" Content="Delete User"/>
+                            <Button x:Name="btnDeleteUser" Content="Delete User" Click="btnDeleteUser_Click"/>
                         </StackPanel>
                     </GroupBox>
                 </Grid>

@@ -94,6 +94,8 @@ public partial class MainWindow : Window
                 restaurant,
                 role
                 );
+
+            MessageBox.Show("User added successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 
@@ -124,36 +126,59 @@ public partial class MainWindow : Window
         }
     }
 
-    private async void OnSelected(object sender, SelectionChangedEventArgs e)
+    private void btnChangePassword_Click(object sender, RoutedEventArgs e)
     {
-        if (lbxUserSearchResults.SelectedItem != null)
+        if (lbxUserSearchResults.SelectedItem == null)
         {
-            string[] selectedUser = lbxUserSearchResults.SelectedItem.ToString().Split(" ");
-            try
-            {
-                int id = Convert.ToInt32(selectedUser[0]);
-                var genericDataService = new GenericDataService<User>(new RestaurantContextFactory());
-                var user = await genericDataService.Get(id);
-                if (user == null)
-                {
-                    MessageBox.Show("User not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return; // throw new Exception("User not found.");
-                }
-                else
-                {
-                    txtFirstname.Text = user.FirstName;
-                    txtLastname.Text = user.LastName;
-                    txtLogin.Text = user.Login;
-                    txtPassword.Password = user.PasswordHash; // Note: This should not be done in production, passwords should not be retrievable.
-                    cmbRole.SelectedValue = user.RoleId;
-                    cmbRestaurant.SelectedValue = user.RestaurantId;
-                }
-            }
-            catch (FormatException)
-            {
-                MessageBox.Show("Failed Id convertion.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return; // throw new Exception("Invalid user selection. Please select a valid user.");
-            }
+            MessageBox.Show("Please select a user from the search results.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return; // throw new Exception("Please select a user from the search results.");
         }
+        else if (txtChangePassword.Password != txtConfirmChangePassword.Password)
+        {
+            MessageBox.Show("Passwords do not match.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return; // throw new Exception("Passwords do not match.");
+        }
+
+        try
+        {
+            int selectedUserId = Convert.ToInt32(lbxUserSearchResults.SelectedItem.ToString().Split(" ")[0]);
+            string newPassword = txtChangePassword.Password;
+            var messageBoxResult = MessageBox.Show($"Confirm password change for User: {selectedUserId}", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+
+            if (messageBoxResult == MessageBoxResult.OK)
+            {
+                UserManagement userManagement = new(new GenericDataService<User>(new RestaurantContextFactory()));
+                userManagement.UpdatePassword(selectedUserId, new User()
+                {
+                    PasswordHash = newPassword
+                });
+                MessageBox.Show("Password changed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+        }
+        catch (FormatException)
+        {
+            MessageBox.Show("Failed Id convertion.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async void btnDeleteUser_Click(object sender, RoutedEventArgs e)
+    {
+        if (lbxUserSearchResults.SelectedItem == null)
+        {
+            MessageBox.Show("Please select a user from the search results.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return; // throw new Exception("Please select a user from the search results.");
+        }
+
+        int selectedUserId = Convert.ToInt32(lbxUserSearchResults.SelectedItem.ToString().Split(" ")[0]);
+        var messageBoxResult = MessageBox.Show($"DELETE user account?\nThis action is irreversible.", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+
+        if (messageBoxResult == MessageBoxResult.OK)
+        {
+            GenericDataService<User> _userService = new(new RestaurantContextFactory());
+            await _userService.Delete(selectedUserId);
+            MessageBox.Show("Account deleted successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
     }
 }

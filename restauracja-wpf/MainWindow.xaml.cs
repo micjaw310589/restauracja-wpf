@@ -15,6 +15,7 @@ using restauracja_wpf.Data;
 using restauracja_wpf.Interfaces;
 using restauracja_wpf.Models;
 using restauracja_wpf.Services;
+using System.Text.RegularExpressions;
 
 namespace restauracja_wpf;
 public partial class MainWindow : Window
@@ -24,6 +25,11 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         FillUpComboBoxAsync();
+    }
+    private void PreviewNumericInput(object sender, TextCompositionEventArgs e)
+    {
+        Regex regex = new Regex("[^0-9]+,");
+        e.Handled = regex.IsMatch(e.Text);
     }
 
     private async void FillUpComboBoxAsync()        // wip
@@ -40,6 +46,10 @@ public partial class MainWindow : Window
         cmbRestaurant.DisplayMemberPath = "Name";
         cmbRestaurant.SelectedValuePath = "Id";
         cmbRestaurant.SelectedIndex = 0;
+
+        // DISHES
+        cmbDishAvaibility.Items.Add("Available");
+        cmbDishAvaibility.Items.Add("Not Available");
     }
 
     private void btnAddUser_Click(object sender, RoutedEventArgs e)
@@ -155,5 +165,21 @@ public partial class MainWindow : Window
                 return; // throw new Exception("Invalid user selection. Please select a valid user.");
             }
         }
+    }
+
+    private async void btnAddDish_Click(object sender, RoutedEventArgs e)
+    {
+        
+        MessageBox.Show((Convert.ToDecimal(txtDishPrice.Text)).ToString());
+    }
+
+    private void rbtnDishTimeConst_Click(object sender, RoutedEventArgs e)
+    {
+        grpConstTime.IsEnabled = true;
+    }
+
+    private void rbtnDishTimeDynamic_Click(object sender, RoutedEventArgs e)
+    {
+        grpConstTime.IsEnabled = false;
     }
 }

@@ -19,6 +19,19 @@ namespace restauracja_wpf.Interfaces
             _dishService = dishService;
         }
 
+        public async void AddDish(string name, decimal price, bool avaibility, TimeSpan time)
+        {
+            using (var context = new RestaurantContextFactory().CreateDbContext())
+            {
+                await _dishService.Create(new Dish()
+                {
+                    Name = name,
+                    Price = price,
+                    Available = avaibility,
+                    TimeConstant = time
+                });
+            }
+        }
         public async void AddDish(string name, decimal price)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())

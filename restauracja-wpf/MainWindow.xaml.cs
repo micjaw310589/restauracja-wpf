@@ -31,6 +31,22 @@ public partial class MainWindow : Window
         Regex regex = new Regex("[^0-9]+,");
         e.Handled = regex.IsMatch(e.Text);
     }
+    private decimal stringToPrice(string str)
+    {
+        str = str.Trim();
+        if (str.Length == 0) { return 0; }
+        else if (str.Contains(' '))
+        {
+            string str_new = "";
+            foreach (string c in str.Split(' ')) { str_new += c; }
+            ;
+            return Convert.ToDecimal(str_new);
+        }
+        else
+        {
+            return Convert.ToDecimal(str);
+        }
+    }
 
     private async void FillUpComboBoxAsync()        // wip
     {
@@ -50,6 +66,8 @@ public partial class MainWindow : Window
         // DISHES
         cmbDishAvaibility.Items.Add("Available");
         cmbDishAvaibility.Items.Add("Not Available");
+        cmbChangeDishAvaibility.Items.Add("Available");
+        cmbChangeDishAvaibility.Items.Add("Not Available");
     }
 
     private void btnAddUser_Click(object sender, RoutedEventArgs e)
@@ -57,7 +75,7 @@ public partial class MainWindow : Window
         if (txtFirstname.Text.IsNullOrEmpty() || txtLastname.Text.IsNullOrEmpty() ||
             txtLogin.Text.IsNullOrEmpty() || txtPassword.Password.IsNullOrEmpty() ||
             txtConfirmPassword.Password.IsNullOrEmpty() ||
-            cmbRole.SelectedValue.ToString().IsNullOrEmpty())
+            cmbRole.Text.IsNullOrEmpty())
         {
             MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return; // throw new Exception("Please fill in all fields.");
@@ -167,19 +185,160 @@ public partial class MainWindow : Window
         }
     }
 
+    //--------------------------------------------DISH----------------------------------------------
+
     private async void btnAddDish_Click(object sender, RoutedEventArgs e)
     {
-        
-        MessageBox.Show((Convert.ToDecimal(txtDishPrice.Text)).ToString());
+        if (txtDishName.Text.IsNullOrEmpty() || txtDishPrice.Text.IsNullOrEmpty() ||
+            cmbDishAvaibility.Text.IsNullOrEmpty() || txtSeconds.Text.IsNullOrEmpty() ||
+            txtMinutes.Text.IsNullOrEmpty())
+        {
+            MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return; // throw new Exception("Please fill in all fields.");
+        }
+        else if (cmbDishAvaibility.SelectedValue == null)
+        {
+            MessageBox.Show("Please select an avaibility state.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return; // throw new Exception("Please select a state.");
+        }
+
+        string name = txtDishName.Text;
+        decimal price = stringToPrice(txtDishPrice.Text);
+        bool avaibility = (cmbDishAvaibility.Text=="Available")? true : false;
+        TimeSpan timeSpan = new TimeSpan(0, Convert.ToInt32(txtMinutes.Text), Convert.ToInt32(txtSeconds.Text));
+
+        var messageBoxResult = MessageBox.Show($"Confirm Dish creation:\n" +
+            $"Dish name: {name}\n" +
+            $"Price: {price}\n" +
+            $"Avaibility: {avaibility}\n" +
+            $"Time to make (hh:mm:ss): {timeSpan}\n", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+
+        if (messageBoxResult == MessageBoxResult.OK)
+        {
+            DishManagement dishManagement = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
+            dishManagement.AddDish(
+                name,
+                price,
+                avaibility,
+                timeSpan
+                );
+
+        }
     }
 
     private void rbtnDishTimeConst_Click(object sender, RoutedEventArgs e)
     {
-        grpConstTime.IsEnabled = true;
+        grpConstTimeChangeDish.IsEnabled = true;
     }
 
     private void rbtnDishTimeDynamic_Click(object sender, RoutedEventArgs e)
     {
-        grpConstTime.IsEnabled = false;
+        grpConstTimeChangeDish.IsEnabled = false;
+    }
+
+    private async void btnSearchDish_ClickAsync(object sender, RoutedEventArgs e)
+    {
+        DishManagement dishManagement = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
+        string dishname = txtSearchDish.Text;
+
+        if (string.IsNullOrEmpty(dishname))
+        {
+            MessageBox.Show("Please enter a dish name to search.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return; // throw new Exception("Please enter a dish name to search.");
+        }
+
+        var dishes = await dishManagement.GetMatchingDishes(dishname);
+
+        if (dishes == default || dishes == null)
+        {
+            MessageBox.Show("No dishes found with the given name.", "Search Result", MessageBoxButton.OK, MessageBoxImage.Information);
+            return; // throw new Exception("No dishes found with the given name.");
+        }
+
+        lbxDishSearchResults.Items.Clear();
+        lbxDishSearchResults.SelectedItem = null;
+        foreach (var dish in dishes)
+        {
+            lbxDishSearchResults.Items.Add($"{dish.Id} {dish.Name} {dish.Price}$ (avaibility: {dish.Available})");
+        }
+    }
+
+    private async void btnChangeDish_Click(object sender, RoutedEventArgs e)
+    {
+        if (lbxDishSearchResults.SelectedItem != null)
+        {
+            string[] selectedUser = lbxDishSearchResults.SelectedItem.ToString().Split(" ");
+            try
+            {
+                int id = Convert.ToInt32(selectedUser[0]);
+                var genericDataService = new GenericDataService<Dish>(new RestaurantContextFactory());
+                var dish = await genericDataService.Get(id);
+                if (dish == null)
+                {
+                    MessageBox.Show("Dish not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return; // throw new Exception("Dish not found.");
+                }
+                else
+                {
+                    dish.Name = txtChangeDishName.Text;
+                    dish.Price = stringToPrice(txtChangeDishPrice.Text);
+                    dish.Available = (cmbChangeDishAvaibility.SelectedItem == "Available") ? true : false;
+                    dish.IsTimeCalculated = (rbtnDishTimeDynamic.IsChecked == true && dish.TimeCalculated != null);
+                    dish.TimeConstant = new TimeSpan(0, Convert.ToInt32(txtChangeDishMinutes.Text), Convert.ToInt32(txtChangeDishSeconds.Text));
+                    dish.DishOfTheDay = (chkChangeDishOfTheDay.IsChecked == true);
+                    dish.Exclude = (chkChangeDishExclude.IsChecked == true);
+                    genericDataService.Update(id, dish);
+                }
+            }
+
+            catch (FormatException)
+            {
+                MessageBox.Show("Failed Id convertion.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return; // throw new Exception("Invalid user selection. Please select a valid user.");
+            }
+        }
+    }
+
+    private async void lbxDishSearchResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        string[] selectedUser = lbxDishSearchResults.SelectedItem.ToString().Split(" ");
+        try
+        {
+            int id = Convert.ToInt32(selectedUser[0]);
+            var genericDataService = new GenericDataService<Dish>(new RestaurantContextFactory());
+            var dish = await genericDataService.Get(id);
+            if (dish == null)
+            {
+                MessageBox.Show("Dish not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return; // throw new Exception("Dish not found.");
+            }
+            else
+            {
+                txtChangeDishName.Text = dish.Name;
+                txtChangeDishPrice.Text = dish.Price.ToString();
+                if (dish.Available) cmbChangeDishAvaibility.SelectedIndex = 0;  else cmbChangeDishAvaibility.SelectedIndex = 1;
+                try
+                {
+                    rbtnDishTimeDynamic.IsChecked = dish.IsTimeCalculated;
+                    rbtnDishTimeConst.IsChecked = !(dish.IsTimeCalculated);
+                }
+                finally { }
+                TimeSpan tempTime = TimeSpan.Zero;
+                if(dish.TimeConstant != null)
+                {
+                    tempTime += (TimeSpan)dish.TimeConstant;
+                }
+                txtChangeDishMinutes.Text = tempTime.Minutes.ToString();
+                txtChangeDishSeconds.Text = tempTime.Seconds.ToString();
+                chkChangeDishOfTheDay.IsChecked = dish.DishOfTheDay;
+                chkChangeDishExclude.IsChecked = dish.Exclude;
+            }
+        }
+        catch
+        {
+            MessageBox.Show("Failed Id convertion.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return; // throw new Exception("Invalid user selection. Please select a valid user.");
+        }
+
     }
 }

@@ -96,6 +96,52 @@
                     <GroupBox Grid.Column="1" Header="Modify Dish"/>
                 </Grid>
             </TabItem>
+            <TabItem x:Name="tabRestaurantManagement" Header="Restaurant Management">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox x:Name="grpRestaurantCreate" Header="Create Restaurant">
+                        <StackPanel>
+                            <Label Content="Name:"/>
+                            <TextBox x:Name="txtRestaurantName" TextWrapping="Wrap" Width="120" MaxLength="50" HorizontalAlignment="Left"/>
+                            <Label Content="Address:"/>
+                            <TextBox x:Name="txtRestaurantAddress" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="100"/>
+                            <Label Content="City:"/>
+                            <TextBox TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <Label Content="Is open?"/>
+                            <Label>
+                                <CheckBox Content="CheckBox"/>
+                            </Label>
+                            <Button x:Name="btnAddRestaurant" Content="Add Restaurant"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox x:Name="grpRestaurantUpdateDelete" Grid.Column="1" Header="Modify Restaurant">
+                        <StackPanel>
+                            <Label Content="Search by name:"/>
+                            <TextBox x:Name="txtSearchRestaurant" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="50"/>
+                            <Label></Label>
+                            <Button x:Name="btnSearchRestaurant" Content="Search"/>
+                            <Label></Label>
+                            <ListBox x:Name="lbxRestaurantSearchResults" Height="100"/>
+                            <Label></Label>
+                            <Label Content="Change name:"/>
+                            <TextBox x:Name="txtChangeRestaurantName" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="50"/>
+                            <Label Content="Change address:"/>
+                            <TextBox x:Name="txtChangeRestaurantAddress" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="100"/>
+                            <Label Content="Change city:"/>
+                            <TextBox x:Name="txtChangeRestaurantCity" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="50"/>
+                            <Label/>
+                            <CheckBox x:Name="chxChangeIsOpen"  Content="Is open?"/>
+                            <Label/>
+                            <Button x:Name="btnDeleteRestaurant" Content="Delete Restaurant"/>
+                            <Label/>
+                            <Button x:Name="btnConfirm" Content="Change"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

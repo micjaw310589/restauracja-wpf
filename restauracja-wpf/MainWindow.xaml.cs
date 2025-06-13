@@ -347,6 +347,16 @@ public partial class MainWindow : Window
         {
             statusManagement.AddStatus(stat);
         }
+
+        //--------ADD ROLES-----------
+
+        string[] Roles = ["Admin", "Manager", "Waiter", "Cook"];
+        RoleManagement roleManagement = new(new GenericDataService<Role>(new RestaurantContextFactory()));
+        roleManagement.ClearRoles();
+        foreach (string role in Roles) {
+            roleManagement.AddRole(role);
+        }
+
         MessageBox.Show("Done!");
     }
 

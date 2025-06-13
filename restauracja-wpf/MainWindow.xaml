@@ -60,6 +60,7 @@
                     </Grid.ColumnDefinitions>
                     <Grid/>
                     <GroupBox x:Name="grpUserCreate" Header="Create User">
+                        <ScrollViewer>
                         <StackPanel>
                             <Label Content="Firstname:"/>
                             <TextBox x:Name="txtFirstname" TextWrapping="Wrap" Width="120" MaxLength="20" HorizontalAlignment="Left"/>
@@ -79,9 +80,11 @@
                             <CheckBox x:Name="ckbEnabled" IsChecked="True" Content="Account Enabled" />
                             <Label></Label>
                             <Button x:Name="btnAddUser" Content="Add User" Click="btnAddUser_Click"/>
-                        </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
                     </GroupBox>
                     <GroupBox x:Name="grpUserUpdateDelete" Grid.Column="1" Header="Modify User">
+                        <ScrollViewer>
                         <StackPanel>
                             <Label Content="Search by lastname:"/>
                             <TextBox x:Name="txtSearchUser" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
@@ -89,7 +92,8 @@
                             <Button x:Name="btnSearchUser" Content="Search" Click="btnSearchUser_ClickAsync"/>
                             <Label></Label>
                             <ListBox x:Name="lbxUserSearchResults" Height="236" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="OnSelectionChanged"/>
-                        </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
                     </GroupBox>
                 </Grid>
             </TabItem>
@@ -102,7 +106,8 @@
                     <Grid/>
                     <Grid>
                         <GroupBox Header="Create Dish">
-                            <StackPanel>
+                            <ScrollViewer>
+                                <StackPanel>
                                 <Label Content="Name:" RenderTransformOrigin="-0.105,0.504"/>
                                 <TextBox x:Name="txtDishName" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                 <Label Content="Price:" RenderTransformOrigin="-0.105,0.504"/>
@@ -110,7 +115,7 @@
                                 <Label Content="Avaibility:" RenderTransformOrigin="-0.105,0.504"/>
                                 <ComboBox x:Name="cmbDishAvaibility" Width="120" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding}"/>
                                 <GroupBox x:Name="grpConstTime" Header="Constant time" Margin="0,10,0,0">
-                                    <StackPanel Orientation="Horizontal" Width="141" HorizontalAlignment="Left">
+                                    <StackPanel Orientation="Horizontal">
                                         <TextBox x:Name="txtMinutes" PreviewTextInput="PreviewNumericInput" Width="40" TextAlignment="Center" VerticalAlignment="Center" MaxLength="2"/>
                                         <TextBlock Text="min" Margin="2,0,5,0" VerticalAlignment="Center"/>
                                         <TextBlock Text=":" Margin="0,0,5,0" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -119,8 +124,9 @@
                                     </StackPanel>
                                 </GroupBox>
                                 <Label/>
-                                <Button x:Name="btnAddDish" Content="Add Dish" Margin="2,0,0,0" Click="btnAddDish_Click" Width="269" HorizontalAlignment="Left"/>
-                            </StackPanel>
+                                <Button x:Name="btnAddDish" Content="Add Dish" Margin="2,0,0,0" Click="btnAddDish_Click"/>
+                                </StackPanel>
+                            </ScrollViewer>
                         </GroupBox>
                     </Grid>
                     <GroupBox Grid.Column="1" Header="Modify Dish">
@@ -169,7 +175,8 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <GroupBox x:Name="grpRestaurantCreate" Header="Create Restaurant">
-                        <StackPanel>
+                        <ScrollViewer>
+                            <StackPanel>
                             <Label Content="Name:"/>
                             <TextBox x:Name="txtRestaurantName" TextWrapping="Wrap" Width="120" MaxLength="50" HorizontalAlignment="Left"/>
                             <Label Content="Address:"/>
@@ -181,8 +188,10 @@
                             </Label>
                             <Button x:Name="btnAddRestaurant" Content="Add Restaurant" Click="btnAddRestaurant_Click"/>
                         </StackPanel>
+                        </ScrollViewer>
                     </GroupBox>
                     <GroupBox x:Name="grpRestaurantUpdateDelete" Grid.Column="1" Header="Modify Restaurant">
+                        <ScrollViewer>
                         <StackPanel>
                             <Label Content="Search by name:"/>
                             <TextBox x:Name="txtSearchRestaurant" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="50"/>
@@ -203,7 +212,8 @@
                             <Button x:Name="btnDeleteRestaurant" Content="Delete Restaurant" Click="btnDeleteRestaurant_Click"/>
                             <Label/>
                             <Button x:Name="btnRestaurantChange" Content="Change" Click="btnRestaurantChange_Click"/>
-                        </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
                     </GroupBox>
                 </Grid>
             </TabItem>

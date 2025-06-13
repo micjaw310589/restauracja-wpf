@@ -15,21 +15,27 @@ using restauracja_wpf.Data;
 using restauracja_wpf.Models;
 using restauracja_wpf.Services;
 using System.Text.RegularExpressions;
+using restauracja_wpf.Interfaces;
 
 namespace restauracja_wpf;
+
 public partial class MainWindow : Window
 {
+    private User loggedUser;
+
     public MainWindow()
     {
         InitializeComponent();
 
         FillUpComboBoxAsync();
     }
+
     private void PreviewNumericInput(object sender, TextCompositionEventArgs e)
     {
         Regex regex = new Regex("[^0-9]+,");
         e.Handled = regex.IsMatch(e.Text);
     }
+
     private decimal stringToPrice(string str)
     {
         str = str.Trim();
@@ -72,7 +78,7 @@ public partial class MainWindow : Window
     private void btnAddUser_Click(object sender, RoutedEventArgs e)
     {
         if (txtFirstname.Text.IsNullOrEmpty() || txtLastname.Text.IsNullOrEmpty() ||
-            txtLogin.Text.IsNullOrEmpty() || txtPassword.Password.IsNullOrEmpty() ||
+            txtUsername.Text.IsNullOrEmpty() || txtPassword.Password.IsNullOrEmpty() ||
             txtConfirmPassword.Password.IsNullOrEmpty() ||
             cmbRole.Text.IsNullOrEmpty())
         {
@@ -97,7 +103,7 @@ public partial class MainWindow : Window
 
         string firstname = txtFirstname.Text;
         string lastname = txtLastname.Text;
-        string login = txtLogin.Text;
+        string login = txtUsername.Text;
         string password = txtPassword.Password;
         string restaurant = cmbRestaurant.Text;
         string role = cmbRole.Text;
@@ -344,18 +350,13 @@ public partial class MainWindow : Window
         MessageBox.Show("Done!");
     }
 
-    private void btnManageOrder_Click(object sender, RoutedEventArgs e, Func<string, Task<IEnumerable<Order>>> orders2, Func<Task<IEnumerable<Order>>> orders)
-    {
-        btnManageOrder_Click(sender, e, orders2, orders, orders);
-    }
-
-    private async void btnManageOrder_Click(object sender, RoutedEventArgs e, Func<string, Task<IEnumerable<Order>>> orders2, Func<Task<IEnumerable<Order>>> orders, Func<Task<IEnumerable<Order>>> orders)
+    private async void btnManageOrder_Click(object sender, RoutedEventArgs e, IEnumerable<Order> orders2, IEnumerable<Order> orders)
     {
         OrderManagement orderManagement = new(new GenericDataService<Order>(new RestaurantContextFactory()));
-        var orders = orderManagement.GetActiveOrders;
-        if (orders != null)
+        var _orders = await orderManagement.GetActiveOrders();
+        if (_orders != null)
         {
-            foreach (var order in orders)
+            foreach (var order in _orders)
             {
                 lbxPendingOrders.Items.Add(order);
             }
@@ -533,6 +534,26 @@ public partial class MainWindow : Window
             MessageBox.Show("Restaurant not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
         }
+
+    }
+
+    private async void btnLogIn_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            UserDataService userService = new(new GenericDataService<User>(new RestaurantContextFactory()));
+            loggedUser = await userService.Login(txtLogin.Text, txtLoginPassword.Password);
+            txtbLoginInfo.Text = $"Logged in as: {loggedUser.FirstName} {loggedUser.LastName} ({loggedUser.Role.Name})";
+        }
+        catch (Exception ex)
+        {
+            txtbLoginInfo.Text = ex.Message;
+            return; // throw new Exception("Login failed. Please check your credentials.");
+        }
+    }
+
+    private void btnManageOrder_Click(object sender, RoutedEventArgs e)
+    {
 
     }
 }

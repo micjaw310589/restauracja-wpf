@@ -30,7 +30,29 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabUserManagement" Header="User Management" Height="22" Margin="-2,0,-2,0" VerticalAlignment="Bottom">
+            <TabItem x:Name="tabLogin" Header="Log In">
+                <Grid x:Name="txtLogin1">
+                    <Grid.ColumnDefinitions>
+
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Login:" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" FontSize="16" Margin="25,0,0,0" Grid.Column="0" Height="32" Width="54"/>
+                    <Label Content="Password:" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" FontSize="16" Margin="12,0,0,0" Grid.Column="0" Height="31" Width="80"/>
+                    <TextBox x:Name="txtLogin" FontSize="16" Grid.Row="1" Grid.Column="1" Margin="10,5,100,5"/>
+                    <PasswordBox x:Name="txtLoginPassword" FontSize="16" Grid.Row="2" Grid.Column="1" Margin="10,5,100,5"/>
+                    <Button x:Name="btnLogIn" Grid.Column="1" Content="Log In" Grid.Row="3" Margin="10, 10, 300, 10" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="btnLogIn_Click"/>
+                    <TextBlock x:Name="txtbLoginInfo" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="4" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="240" FontSize="14"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabUserManagement" Header="Users" Height="22" Margin="-2,0,-2,0" VerticalAlignment="Bottom">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -43,8 +65,8 @@
                             <TextBox x:Name="txtFirstname" TextWrapping="Wrap" Width="120" MaxLength="20" HorizontalAlignment="Left"/>
                             <Label Content="Lastname:"/>
                             <TextBox x:Name="txtLastname" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
-                            <Label Content="Login:"/>
-                            <TextBox x:Name="txtLogin" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                            <Label Content="Username:"/>
+                            <TextBox x:Name="txtUsername" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
                             <Label Content="Password:"/>
                             <PasswordBox x:Name="txtPassword"  Width="120" HorizontalAlignment="Left" MaxLength="30"/>
                             <Label Content="Confirm Password:"/>
@@ -71,7 +93,7 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabDishManagement" HorizontalAlignment="Left" Height="22" Header="Dish Management" VerticalAlignment="Center" Width="115" Margin="-1,0,0,0">
+            <TabItem x:Name="tabDishManagement" HorizontalAlignment="Left" Height="22" Header="Menu" VerticalAlignment="Center">
                 <Grid x:Name="DishManagement" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -103,44 +125,44 @@
                     </Grid>
                     <GroupBox Grid.Column="1" Header="Modify Dish">
                         <ScrollViewer>
-                        <StackPanel>
-                            <Label Content="Search by name:"/>
-                            <TextBox x:Name="txtSearchDish" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
-                            <Label></Label>
-                            <Button x:Name="btnSearchDish" Content="Search" Click="btnSearchDish_ClickAsync"/>
-                            <Label></Label>
-                            <ListBox x:Name="lbxDishSearchResults" Height="100" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="OnSelected" SelectionChanged="lbxDishSearchResults_SelectionChanged"/>
-                            <Label Content="Change name:"/>
-                            <TextBox x:Name="txtChangeDishName" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
-                            <Label Content="Change price:"/>
-                            <TextBox x:Name="txtChangeDishPrice" PreviewTextInput="PreviewNumericInput" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
-                            <Label Content="Avaibility:"/>
-                            <ComboBox x:Name="cmbChangeDishAvaibility"/>
-                            <Label/>
-                            <StackPanel Orientation="Horizontal">
-                                <RadioButton x:Name="rbtnDishTimeConst" Content="Constant time" Margin="0,0,5,0" VerticalAlignment="Center" IsChecked="True" Click="rbtnDishTimeConst_Click"/>
-                                <RadioButton x:Name="rbtnDishTimeDynamic" Content="Calculated time" Margin="0,0,5,0" VerticalAlignment="Center" IsChecked="False" Click="rbtnDishTimeDynamic_Click"/>
-                            </StackPanel>
-                            <GroupBox x:Name="grpConstTimeChangeDish" Header="Constant time" Margin="0,10,0,0">
-                                <StackPanel Orientation="Horizontal" Width="141" HorizontalAlignment="Left">
-                                    <TextBox x:Name="txtChangeDishMinutes" PreviewTextInput="PreviewNumericInput" Width="40" TextAlignment="Center" VerticalAlignment="Center" MaxLength="2"/>
-                                    <TextBlock Text="min" Margin="2,0,5,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text=":" Margin="0,0,5,0" VerticalAlignment="Center" FontWeight="Bold"/>
-                                    <TextBox x:Name="txtChangeDishSeconds" PreviewTextInput="PreviewNumericInput" Width="40" TextAlignment="Center" VerticalAlignment="Center" MaxLength="2"/>
-                                    <TextBlock Text="sec" Margin="2,0,0,0" VerticalAlignment="Center"/>
+                            <StackPanel>
+                                <Label Content="Search by name:"/>
+                                <TextBox x:Name="txtSearchDish" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
+                                <Label></Label>
+                                <Button x:Name="btnSearchDish" Content="Search" Click="btnSearchDish_ClickAsync"/>
+                                <Label></Label>
+                                <ListBox x:Name="lbxDishSearchResults" Height="100" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="OnSelected" SelectionChanged="lbxDishSearchResults_SelectionChanged"/>
+                                <Label Content="Change name:"/>
+                                <TextBox x:Name="txtChangeDishName" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
+                                <Label Content="Change price:"/>
+                                <TextBox x:Name="txtChangeDishPrice" PreviewTextInput="PreviewNumericInput" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
+                                <Label Content="Avaibility:"/>
+                                <ComboBox x:Name="cmbChangeDishAvaibility"/>
+                                <Label/>
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="rbtnDishTimeConst" Content="Constant time" Margin="0,0,5,0" VerticalAlignment="Center" IsChecked="True" Click="rbtnDishTimeConst_Click"/>
+                                    <RadioButton x:Name="rbtnDishTimeDynamic" Content="Calculated time" Margin="0,0,5,0" VerticalAlignment="Center" IsChecked="False" Click="rbtnDishTimeDynamic_Click"/>
                                 </StackPanel>
-                            </GroupBox>
-                            <CheckBox x:Name="chkChangeDishOfTheDay" Content="Dish of the day"/>
-                            <CheckBox Content="Exclude" x:Name="chkChangeDishExclude"/>
-                            <Button x:Name="btnChangeDish" Content="Change" Click="btnChangeDish_Click"/>
-                            <Label></Label>
-                            <Button x:Name="btnDeleteDish" Content="Delete Dish"/>
+                                <GroupBox x:Name="grpConstTimeChangeDish" Header="Constant time" Margin="0,10,0,0">
+                                    <StackPanel Orientation="Horizontal" Width="141" HorizontalAlignment="Left">
+                                        <TextBox x:Name="txtChangeDishMinutes" PreviewTextInput="PreviewNumericInput" Width="40" TextAlignment="Center" VerticalAlignment="Center" MaxLength="2"/>
+                                        <TextBlock Text="min" Margin="2,0,5,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text=":" Margin="0,0,5,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                                        <TextBox x:Name="txtChangeDishSeconds" PreviewTextInput="PreviewNumericInput" Width="40" TextAlignment="Center" VerticalAlignment="Center" MaxLength="2"/>
+                                        <TextBlock Text="sec" Margin="2,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <CheckBox x:Name="chkChangeDishOfTheDay" Content="Dish of the day"/>
+                                <CheckBox Content="Exclude" x:Name="chkChangeDishExclude"/>
+                                <Button x:Name="btnChangeDish" Content="Change" Click="btnChangeDish_Click"/>
+                                <Label></Label>
+                                <Button x:Name="btnDeleteDish" Content="Delete Dish"/>
                             </StackPanel>
                         </ScrollViewer>
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabRestaurantManagement" Header="Restaurant Management">
+            <TabItem x:Name="tabRestaurantManagement" Header="Restaurants">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

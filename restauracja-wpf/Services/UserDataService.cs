@@ -3,6 +3,7 @@ using restauracja_wpf.Data;
 using restauracja_wpf.Models;
 using System;
 using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,19 @@ namespace restauracja_wpf.Services
 {
     public class UserDataService(GenericDataService<User> userService) : GenericDataService<User>(new RestaurantContextFactory())
     {
+        public async Task<User> Login(string login, string password)
+        {
+            using (var context = new RestaurantContextFactory().CreateDbContext())
+            {
+                var user = await context.Users
+                    .Include(u => u.Role)
+                    .FirstOrDefaultAsync(u => u.Login == login && u.PasswordHash == password);
+                if (user == null)
+                    throw new Exception("Invalid login or password");
+                return user;
+            }
+        }
+
         public async void CreateUser(string firstname, string lastname, string login, string password, string restaurant, string role, bool status)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())

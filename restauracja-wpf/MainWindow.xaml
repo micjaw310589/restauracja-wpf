@@ -35,6 +35,8 @@
                             <Label Content="Restaurant:"/>
                             <ComboBox x:Name="cmbRestaurant" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding}"/>
                             <Label></Label>
+                            <CheckBox x:Name="ckbEnabled" IsChecked="True" Content="Account Enabled" />
+                            <Label></Label>
                             <Button x:Name="btnAddUser" Content="Add User" Click="btnAddUser_Click"/>
                         </StackPanel>
                     </GroupBox>
@@ -45,15 +47,7 @@
                             <Label></Label>
                             <Button x:Name="btnSearchUser" Content="Search" Click="btnSearchUser_ClickAsync"/>
                             <Label></Label>
-                            <ListBox x:Name="lbxUserSearchResults" Height="100" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-                            <Label Content="Change password:"/>
-                            <PasswordBox x:Name="txtChangePassword"  Width="120" HorizontalAlignment="Left" MaxLength="30"/>
-                            <Label Content="Confirm change password:"/>
-                            <PasswordBox x:Name="txtConfirmChangePassword" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
-                            <Label></Label>
-                            <Button x:Name="btnChangePassword" Content="Change Password" Click="btnChangePassword_Click"/>
-                            <Label></Label>
-                            <Button x:Name="btnDeleteUser" Content="Delete User" Click="btnDeleteUser_Click"/>
+                            <ListBox x:Name="lbxUserSearchResults" Height="236" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="OnSelectionChanged"/>
                         </StackPanel>
                     </GroupBox>
                 </Grid>

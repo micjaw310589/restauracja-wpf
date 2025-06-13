@@ -12,7 +12,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.IdentityModel.Tokens;
 using restauracja_wpf.Data;
-using restauracja_wpf.Interfaces;
 using restauracja_wpf.Models;
 using restauracja_wpf.Services;
 
@@ -74,6 +73,7 @@ public partial class MainWindow : Window
         string password = txtPassword.Password;
         string restaurant = cmbRestaurant.Text;
         string role = cmbRole.Text;
+        bool status = ckbEnabled.IsChecked == true ? true : false;
 
         var messageBoxResult = MessageBox.Show($"Confirm User creation:\n" +
             $"Firstname: {firstname}\n" +
@@ -81,18 +81,20 @@ public partial class MainWindow : Window
             $"Login: {login}\n" +
             $"Password: {password}\n" +
             $"Role: {role}\n" +
-            $"Restaurant: {restaurant}", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            $"Restaurant: {restaurant}\n" +
+            $"Status (enabled?): {status}", "Confirm User Creation", MessageBoxButton.OKCancel, MessageBoxImage.Question);
 
         if (messageBoxResult == MessageBoxResult.OK)
         {
-            UserManagement userManagement = new(new GenericDataService<User>(new RestaurantContextFactory()));
-            userManagement.AddUser(
+            UserDataService userService = new(new GenericDataService<User>(new RestaurantContextFactory()));
+            userService.CreateUser(
                 firstname,
                 lastname,
                 login,
                 password,
                 restaurant,
-                role
+                role,
+                status
                 );
 
             MessageBox.Show("User added successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -101,7 +103,7 @@ public partial class MainWindow : Window
 
     private async void btnSearchUser_ClickAsync(object sender, RoutedEventArgs e)
     {
-        UserManagement userManagement = new(new GenericDataService<User>(new RestaurantContextFactory()));
+        UserDataService userService = new(new GenericDataService<User>(new RestaurantContextFactory()));
         string lastname = txtSearchUser.Text;
 
         if (string.IsNullOrEmpty(lastname))
@@ -110,7 +112,7 @@ public partial class MainWindow : Window
             return; // throw new Exception("Please enter a lastname to search.");
         }
 
-        var users = await userManagement.GetMatchingUsers(lastname);
+        var users = await userService.GetUserByLastname(lastname);
 
         if (users == default || users == null)
         {
@@ -122,63 +124,26 @@ public partial class MainWindow : Window
         lbxUserSearchResults.SelectedItem = null;
         foreach (var user in users)
         {
-            lbxUserSearchResults.Items.Add($"{user.Id} {user.FirstName} {user.LastName} (login: {user.Login})");
+            lbxUserSearchResults.Items.Add($"{user.Id} - {user.FirstName} {user.LastName} (login: {user.Login})");
         }
     }
 
-    private void btnChangePassword_Click(object sender, RoutedEventArgs e)
+    private async void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (lbxUserSearchResults.SelectedItem == null)
+        if (lbxUserSearchResults.SelectedItem != null)
         {
-            MessageBox.Show("Please select a user from the search results.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return; // throw new Exception("Please select a user from the search results.");
-        }
-        else if (txtChangePassword.Password != txtConfirmChangePassword.Password)
-        {
-            MessageBox.Show("Passwords do not match.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return; // throw new Exception("Passwords do not match.");
-        }
-
-        try
-        {
-            int selectedUserId = Convert.ToInt32(lbxUserSearchResults.SelectedItem.ToString().Split(" ")[0]);
-            string newPassword = txtChangePassword.Password;
-            var messageBoxResult = MessageBox.Show($"Confirm password change for User: {selectedUserId}", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-
-            if (messageBoxResult == MessageBoxResult.OK)
+            try
             {
-                UserManagement userManagement = new(new GenericDataService<User>(new RestaurantContextFactory()));
-                userManagement.UpdatePassword(selectedUserId, new User()
-                {
-                    PasswordHash = newPassword
-                });
-                MessageBox.Show("Password changed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                int user_id = Convert.ToInt32(lbxUserSearchResults.SelectedItem.ToString().Split(" ")[0]);
+                UserDataService userService = new(new GenericDataService<User>(new RestaurantContextFactory()));
+                var user = await userService.Get(user_id);
+                ModifyUserWindow modifyUserWindow = new ModifyUserWindow(user);
+                modifyUserWindow.ShowDialog();
             }
-
+            catch (FormatException)
+            {
+                MessageBox.Show("Failed Id convertion.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-        catch (FormatException)
-        {
-            MessageBox.Show("Failed Id convertion.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-    }
-
-    private async void btnDeleteUser_Click(object sender, RoutedEventArgs e)
-    {
-        if (lbxUserSearchResults.SelectedItem == null)
-        {
-            MessageBox.Show("Please select a user from the search results.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return; // throw new Exception("Please select a user from the search results.");
-        }
-
-        int selectedUserId = Convert.ToInt32(lbxUserSearchResults.SelectedItem.ToString().Split(" ")[0]);
-        var messageBoxResult = MessageBox.Show($"DELETE user account?\nThis action is irreversible.", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-
-        if (messageBoxResult == MessageBoxResult.OK)
-        {
-            GenericDataService<User> _userService = new(new RestaurantContextFactory());
-            await _userService.Delete(selectedUserId);
-            MessageBox.Show("Account deleted successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
     }
 }

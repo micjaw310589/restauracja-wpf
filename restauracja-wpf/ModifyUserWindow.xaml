@@ -1,0 +1,35 @@
+﻿<Window x:Class="restauracja_wpf.ModifyUserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:restauracja_wpf"
+        mc:Ignorable="d"
+        Title="ModifyUserWindow" Height="500" Width="400">
+    <Grid>
+        <GroupBox x:Name="grpUserCreate" Header="Modify">
+            <StackPanel>
+                <Label Content="Firstname:"/>
+                <TextBox x:Name="txtFirstname" TextWrapping="Wrap" Width="120" MaxLength="20" HorizontalAlignment="Left"/>
+                <Label Content="Lastname:"/>
+                <TextBox x:Name="txtLastname" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
+                <Label Content="Login:"/>
+                <TextBox x:Name="txtLogin" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                <Label Content="Change password:"/>
+                <PasswordBox x:Name="txtChangePassword"  Width="120" HorizontalAlignment="Left" MaxLength="30"/>
+                <Label Content="Confirm password change:"/>
+                <PasswordBox x:Name="txtConfirmChangePassword" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
+                <Label Content="Role:"/>
+                <ComboBox x:Name="cmbRole" Width="120" HorizontalAlignment="Left"/>
+                <Label Content="Restaurant:"/>
+                <ComboBox x:Name="cmbRestaurant" Width="120" HorizontalAlignment="Left"/>
+                <Label></Label>
+                <CheckBox x:Name="ckbEnabled" IsChecked="True" Content="Account Enabled" />
+                <Label></Label>
+                <Button x:Name="btnConfirmChanges" Content="Confirm changes" Click="btnConfirmChanges_Click"/>
+                <Label></Label>
+                <Button x:Name="btnDeleteAccount" Content="Delete account" Click="btnDeleteAccount_Click"/>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</Window>

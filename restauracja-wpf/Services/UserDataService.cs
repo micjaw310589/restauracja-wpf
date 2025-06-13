@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using restauracja_wpf.Data;
 using restauracja_wpf.Models;
-using restauracja_wpf.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 
-namespace restauracja_wpf.Interfaces
+namespace restauracja_wpf.Services
 {
-    public class UserManagement
+    public class UserDataService(GenericDataService<User> userService) : GenericDataService<User>(new RestaurantContextFactory())
     {
-        private readonly GenericDataService<User> _userService;
-        private User _user = new();
+        //private readonly GenericDataService<User> _userService = userService;
+        //private User _user = new();
 
-        public UserManagement(GenericDataService<User> userService)
-        {
-            _userService = userService;
-        }
+        //public UserDataService(GenericDataService<User> userService, User user) : this(userService)
+        //{
+        //    _user = user;
+        //}
 
-        public UserManagement(GenericDataService<User> userService, User user) : this(userService)
-        {
-            _user = user;
-        }
-
-        public async void AddUser(string firstname, string lastname, string login, string password, string restaurant, string role)
+        public async void CreateUser(string firstname, string lastname, string login, string password, string restaurant, string role, bool status)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
@@ -40,23 +34,38 @@ namespace restauracja_wpf.Interfaces
                 else if (foundRole == null)
                     throw new Exception("Role not found");
 
-                await _userService.Create(new User()
+                await userService.Create(new User()
                 {
                     FirstName = firstname,
                     LastName = lastname,
                     Login = login,
                     PasswordHash = password,
                     RoleId = foundRole.Id,
-                    RestaurantId = foundRestaurant.Id
+                    RestaurantId = foundRestaurant.Id,
+                    Status = status
                 });
             }
         }
 
-        public async Task<IEnumerable<User>> GetMatchingUsers(string lastname)
+        public new async Task<User> Get(int id)
+        {
+            using (var context = new RestaurantContextFactory().CreateDbContext())
+            {
+                User foundUser = await context.Users
+                    .Include(u => u.Role)
+                    .Include(u => u.Restaurant)
+                    .FirstOrDefaultAsync(u => u.Id == id);
+                return foundUser;
+            }
+        }
+
+        public async Task<IEnumerable<User>> GetUserByLastname(string lastname)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
                 IEnumerable<User> foundUsers = await context.Users
+                    .Include(u => u.Role)
+                    .Include(u => u.Restaurant)
                     .Where(u => u.LastName.Contains(lastname))
                     .ToListAsync();
 
@@ -64,7 +73,7 @@ namespace restauracja_wpf.Interfaces
             }
         }
 
-        public async void UpdatePassword(int id, User entity)
+        public async void UpdateUserPassword(int id, User entity)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {

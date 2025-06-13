@@ -21,6 +21,7 @@ namespace restauracja_wpf.Models
 
         [Column(TypeName = "time")]
         public TimeSpan? TimeCalculated { get; set; } = null;
+        public bool IsTimeCalculated { get; set; } = false;
 
         public bool DishOfTheDay { get; set; } = false;
 

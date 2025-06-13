@@ -23,7 +23,7 @@ namespace restauracja_wpf.Models
         [MaxLength(30)]
         public string LastName { get; set; } = "";
 
-        public int RoleId { get; set; }
+        public int? RoleId { get; set; } = null;
         public Role? Role { get; set; } = null;
 
         public int? RestaurantId { get; set; } = null;

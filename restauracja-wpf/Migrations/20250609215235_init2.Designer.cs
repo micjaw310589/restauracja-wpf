@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using restauracja_wpf.Data;
 
@@ -11,9 +12,11 @@ using restauracja_wpf.Data;
 namespace restauracja_wpf.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    partial class RestaurantContextModelSnapshot : ModelSnapshot
+    [Migration("20250609215235_init2")]
+    partial class init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,9 +96,6 @@ namespace restauracja_wpf.Migrations
                     b.Property<bool>("Exclude")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsTimeCalculated")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -150,9 +150,6 @@ namespace restauracja_wpf.Migrations
                     b.Property<byte?>("DeliveryNumber")
                         .HasColumnType("tinyint");
 
-                    b.Property<bool>("IsToGo")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime");
 
@@ -165,7 +162,7 @@ namespace restauracja_wpf.Migrations
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TableId")
+                    b.Property<int>("TableId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -194,8 +191,8 @@ namespace restauracja_wpf.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 
@@ -377,7 +374,7 @@ namespace restauracja_wpf.Migrations
                     b.Property<int?>("RestaurantId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RoleId")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Status")
@@ -500,7 +497,9 @@ namespace restauracja_wpf.Migrations
 
                     b.HasOne("restauracja_wpf.Models.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Restaurant");
 

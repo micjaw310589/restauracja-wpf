@@ -9,15 +9,18 @@ namespace restauracja_wpf.Models
         //public int OrderId { get; set; }
 
         public int UserId { get; set; }
+        public bool IsToGo { get; set; }
+        //[Column(TypeName = "tinyint")]
+        public int StatusId { get; set; }
+        public OrderStatus Status { get; set; } = null!;
         public User? User { get; set; } = null;
-
         public int? ReservationId { get; set; }
         public Reservation? Reservation { get; set; } = null;
 
         public int? RegularCustomerId { get; set; }
         public RegularClient? RegularCustomer { get; set; } = null;
 
-        public int TableId { get; set; }
+        public int? TableId { get; set; } = null;
 
         [Column(TypeName = "datetime")]
         public DateTime? OrderDate { get; set; } = DateTime.Now;
@@ -28,9 +31,6 @@ namespace restauracja_wpf.Models
         [Column(TypeName = "tinyint")]
         public sbyte? DeliveryNumber { get; set; } = null;
 
-        //[Column(TypeName = "tinyint")]
-        public int StatusId { get; set; }
-        public OrderStatus Status { get; set; } = null!;
 
         public List<DishOrder> DishOrders { get; set; } = new List<DishOrder>();
         public List<Table> Tables { get; set; } = new List<Table>();

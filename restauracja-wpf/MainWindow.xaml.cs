@@ -341,4 +341,16 @@ public partial class MainWindow : Window
         }
 
     }
+
+    private async void btnSetNewOrdersInDB_Click(object sender, RoutedEventArgs e)
+    {
+        string[] Statuses = ["WaitingForPayment", "SendedToKitchen", "InProgress", "Cancelled", "GivenAway", "InDelivery", "Delivered"];
+        StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
+        statusManagement.ClearAll();
+        foreach (string stat in Statuses)
+        {
+            statusManagement.AddStatus(stat);
+        }
+        MessageBox.Show("Done!");
+    }
 }

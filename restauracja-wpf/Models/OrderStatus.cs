@@ -9,7 +9,7 @@ namespace restauracja_wpf.Models
         //[Column(TypeName = "tinyint")]
         //public sbyte StatusId { get; set; }
 
-        [MaxLength(15)]
+        [MaxLength(20)]
         public string Name { get; set; } = "";
 
         public List<Order> Orders { get; set; } = new List<Order>();

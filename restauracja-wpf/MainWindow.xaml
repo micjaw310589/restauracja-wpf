@@ -22,6 +22,8 @@
                             <Label/>
                             <Button x:Name="btnCancelOrder" Content="Cancel Order"/>
                             <Label/>
+                            <Button x:Name="btnSetNewOrdersInDB" Content="Set Statuses DB" Click="btnSetNewOrdersInDB_Click"/>
+
                         </StackPanel>
                         <Label/>
                         <ListBox x:Name="lbxPendingOrders" Height="200" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="OnSelected"/>

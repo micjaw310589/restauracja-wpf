@@ -59,16 +59,16 @@ namespace restauracja_wpf.Interfaces
 
         }
 
-        //public async Task<IEnumerable<Order>> GetActiveOrders(string lastname)
-        //{
-        //    using (var context = new RestaurantContextFactory().CreateDbContext())
-        //    {
-        //        IEnumerable<User> foundUsers = await context.Users
-        //            .Where(u => u.LastName.Contains(lastname))
-        //            .ToListAsync();
+        public async Task<IEnumerable<Order>> GetActiveOrders()
+        {
+            using (var context = new RestaurantContextFactory().CreateDbContext())
+            {
+                IEnumerable<Order> foundOrders = await context.Orders
+                    .Where(o => o.Status.ToString().Contains("InProgress")).ToListAsync();
+                    
 
-        //        return foundUsers;
-        //    }
-        //}
+                return foundOrders;
+            }
+        }
     }
 }

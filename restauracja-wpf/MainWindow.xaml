@@ -18,7 +18,7 @@
                             <Label/>
                             <Button x:Name="btnAcceptOrder" Content="Accept Order"/>
                             <Label/>
-                            <Button x:Name="btnManageOrder" Content="Manage Order"/>
+                            <Button x:Name="btnManageOrder" Content="Manage Order" Click="btnManageOrder_Click"/>
                             <Label/>
                             <Button x:Name="btnCancelOrder" Content="Cancel Order"/>
                             <Label/>

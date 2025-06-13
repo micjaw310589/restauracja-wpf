@@ -353,4 +353,22 @@ public partial class MainWindow : Window
         }
         MessageBox.Show("Done!");
     }
+
+    private void btnManageOrder_Click(object sender, RoutedEventArgs e, Func<string, Task<IEnumerable<Order>>> orders2, Func<Task<IEnumerable<Order>>> orders)
+    {
+        btnManageOrder_Click(sender, e, orders2, orders, orders);
+    }
+
+    private async void btnManageOrder_Click(object sender, RoutedEventArgs e, Func<string, Task<IEnumerable<Order>>> orders2, Func<Task<IEnumerable<Order>>> orders, Func<Task<IEnumerable<Order>>> orders)
+    {
+        OrderManagement orderManagement = new(new GenericDataService<Order>(new RestaurantContextFactory()));
+        var orders = orderManagement.GetActiveOrders;
+        if (orders != null)
+        {
+            foreach (var order in orders)
+            {
+                lbxPendingOrders.Items.Add(order);
+            }
+        }
+    }
 }

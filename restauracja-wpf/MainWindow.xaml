@@ -109,12 +109,11 @@
                             <Label Content="Address:"/>
                             <TextBox x:Name="txtRestaurantAddress" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="100"/>
                             <Label Content="City:"/>
-                            <TextBox TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
-                            <Label Content="Is open?"/>
+                            <TextBox x:Name="txtRestaurantCity" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
                             <Label>
-                                <CheckBox Content="CheckBox"/>
+                                <CheckBox x:Name="chxRestaurantIsOpen" Content="Is open?"/>
                             </Label>
-                            <Button x:Name="btnAddRestaurant" Content="Add Restaurant"/>
+                            <Button x:Name="btnAddRestaurant" Content="Add Restaurant" Click="btnAddRestaurant_Click"/>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox x:Name="grpRestaurantUpdateDelete" Grid.Column="1" Header="Modify Restaurant">
@@ -122,7 +121,7 @@
                             <Label Content="Search by name:"/>
                             <TextBox x:Name="txtSearchRestaurant" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left" MaxLength="50"/>
                             <Label></Label>
-                            <Button x:Name="btnSearchRestaurant" Content="Search"/>
+                            <Button x:Name="btnSearchRestaurant" Content="Search" Click="btnSearchRestaurant_Click"/>
                             <Label></Label>
                             <ListBox x:Name="lbxRestaurantSearchResults" Height="100"/>
                             <Label></Label>
@@ -135,9 +134,9 @@
                             <Label/>
                             <CheckBox x:Name="chxChangeIsOpen"  Content="Is open?"/>
                             <Label/>
-                            <Button x:Name="btnDeleteRestaurant" Content="Delete Restaurant"/>
+                            <Button x:Name="btnDeleteRestaurant" Content="Delete Restaurant" Click="btnDeleteRestaurant_Click"/>
                             <Label/>
-                            <Button x:Name="btnConfirm" Content="Change"/>
+                            <Button x:Name="btnRestaurantChange" Content="Change" Click="btnRestaurantChange_Click"/>
                         </StackPanel>
                     </GroupBox>
                 </Grid>

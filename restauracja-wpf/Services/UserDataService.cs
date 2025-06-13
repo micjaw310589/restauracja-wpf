@@ -12,14 +12,6 @@ namespace restauracja_wpf.Services
 {
     public class UserDataService(GenericDataService<User> userService) : GenericDataService<User>(new RestaurantContextFactory())
     {
-        //private readonly GenericDataService<User> _userService = userService;
-        //private User _user = new();
-
-        //public UserDataService(GenericDataService<User> userService, User user) : this(userService)
-        //{
-        //    _user = user;
-        //}
-
         public async void CreateUser(string firstname, string lastname, string login, string password, string restaurant, string role, bool status)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())

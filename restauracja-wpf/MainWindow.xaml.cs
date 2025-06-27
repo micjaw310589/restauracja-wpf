@@ -218,7 +218,6 @@ public partial class MainWindow : Window
                 avaibility,
                 timeSpan
                 );
-
         }
     }
 
@@ -297,6 +296,11 @@ public partial class MainWindow : Window
 
     private async void lbxDishSearchResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (lbxDishSearchResults.SelectedItem == null)
+        {
+            return;
+        }
+
         string[] selectedUser = lbxDishSearchResults.SelectedItem.ToString().Split(" ");
         try
         {
@@ -375,7 +379,6 @@ public partial class MainWindow : Window
 
     private void btnAddRestaurant_Click(object sender, RoutedEventArgs e)
     {
-
 
         string address = txtRestaurantAddress.Text;
         string restaurantName = txtRestaurantName.Text;

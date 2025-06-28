@@ -1,25 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using restauracja_wpf.Data;
 using restauracja_wpf.Models;
-using restauracja_wpf.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 
-namespace restauracja_wpf.Interfaces
+namespace restauracja_wpf.Services
 {
-    public class RestaurantManagement
+    public class RestaurantDataService(GenericDataService<Restaurant> restaurantService) : GenericDataService<Restaurant>(new Data.RestaurantContextFactory())
     {
-        private readonly GenericDataService<Restaurant> _restaurantService;
-
-        public RestaurantManagement(GenericDataService<Restaurant> restaurantService)
-        {
-            _restaurantService = restaurantService;
-        }
-
         public async void AddRestaurant(string name, string address, string city, bool isOpen)
         {
 
@@ -31,8 +22,7 @@ namespace restauracja_wpf.Interfaces
                 if (existingRestaurant != null)
                     throw new Exception("Restaurant with this name already exists");
 
-
-                await _restaurantService.Create(new Restaurant()
+                await restaurantService.Create(new Restaurant()
                 {
                     Name = name,
                     Address = address,

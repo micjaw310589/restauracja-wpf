@@ -211,8 +211,8 @@ public partial class MainWindow : Window
 
         if (messageBoxResult == MessageBoxResult.OK)
         {
-            DishManagement dishManagement = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
-            dishManagement.AddDish(
+            DishDataService dishService = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
+            dishService.AddDish(
                 name,
                 price,
                 avaibility,
@@ -233,7 +233,7 @@ public partial class MainWindow : Window
 
     private async void btnSearchDish_ClickAsync(object sender, RoutedEventArgs e)
     {
-        DishManagement dishManagement = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
+        DishDataService dishService = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
         string dishname = txtSearchDish.Text;
 
         if (string.IsNullOrEmpty(dishname))
@@ -242,7 +242,7 @@ public partial class MainWindow : Window
             return; // throw new Exception("Please enter a dish name to search.");
         }
 
-        var dishes = await dishManagement.GetMatchingDishes(dishname);
+        var dishes = await dishService.GetMatchingDishes(dishname);
 
         if (dishes == default || dishes == null)
         {
@@ -275,6 +275,11 @@ public partial class MainWindow : Window
                 }
                 else
                 {
+                    if (MessageBox.Equals(MessageBox.Show("Are you sure you want to update dish data?", "Confirm Change", MessageBoxButton.YesNo, MessageBoxImage.Question), MessageBoxResult.No))
+                    {
+                        return; // User cancelled the update
+                    }
+
                     dish.Name = txtChangeDishName.Text;
                     dish.Price = stringToPrice(txtChangeDishPrice.Text);
                     dish.Available = (cmbChangeDishAvaibility.SelectedItem == "Available") ? true : false;
@@ -398,8 +403,8 @@ public partial class MainWindow : Window
 
         if (messageBoxResult == MessageBoxResult.OK)
         {
-            RestaurantManagement restaurantManagement = new(new GenericDataService<Restaurant>(new RestaurantContextFactory()));
-            restaurantManagement.AddRestaurant(
+            RestaurantDataService restaurantService = new(new GenericDataService<Restaurant>(new RestaurantContextFactory()));
+            restaurantService.AddRestaurant(
                 restaurantName,
                 address,
                 city,
@@ -411,7 +416,7 @@ public partial class MainWindow : Window
 
     private async void btnSearchRestaurant_Click(object sender, RoutedEventArgs e)
     {
-        RestaurantManagement restaurantManagement = new(new GenericDataService<Restaurant>(new RestaurantContextFactory()));
+        RestaurantDataService restaurantService = new(new GenericDataService<Restaurant>(new RestaurantContextFactory()));
 
         string restaurantName = txtSearchRestaurant.Text;
         if (string.IsNullOrEmpty(restaurantName))
@@ -420,7 +425,7 @@ public partial class MainWindow : Window
             return; // throw new Exception("Please enter a restaurant name to search.");
         }
 
-        var restaurants = await restaurantManagement.GetMatchingRestaurants(restaurantName);
+        var restaurants = await restaurantService.GetMatchingRestaurants(restaurantName);
 
         if (restaurants == default || restaurants == null)
         {
@@ -453,7 +458,7 @@ public partial class MainWindow : Window
 
     private async void btnRestaurantChange_Click(object sender, RoutedEventArgs e)
     {
-        RestaurantManagement restaurantManagement = new(new GenericDataService<Restaurant>(new RestaurantContextFactory()));
+        RestaurantDataService restaurantService = new(new GenericDataService<Restaurant>(new RestaurantContextFactory()));
 
         if (lbxRestaurantSearchResults.SelectedItem == null)
         {
@@ -515,7 +520,7 @@ public partial class MainWindow : Window
 
     private async void btnDeleteRestaurant_Click(object sender, RoutedEventArgs e)
     {
-        RestaurantManagement restaurantManagement = new(new GenericDataService<Restaurant>(new RestaurantContextFactory()));
+        RestaurantDataService restaurantService = new(new GenericDataService<Restaurant>(new RestaurantContextFactory()));
 
         if (lbxRestaurantSearchResults.SelectedItem == null)
         {
@@ -568,5 +573,27 @@ public partial class MainWindow : Window
     private void btnManageOrder_Click(object sender, RoutedEventArgs e)
     {
 
+    }
+
+    private async void btnDeleteDish_Click(object sender, RoutedEventArgs e)
+    {
+        DishDataService dishService = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
+        if (MessageBox.Equals(MessageBox.Show($"Remove dish?", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Question), MessageBoxResult.OK))
+        {
+            if (lbxDishSearchResults.SelectedItem != null)
+            {
+                string[] selectedDish = lbxDishSearchResults.SelectedItem.ToString().Split(" ");
+                try
+                {
+                    await dishService.DeleteDish(Convert.ToInt32(selectedDish[0]));
+                    MessageBox.Show("Dish deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Failed Id convertion.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return; // throw new Exception("Invalid user selection. Please select a valid user.");
+                }
+            }
+        }
     }
 }

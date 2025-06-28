@@ -601,5 +601,34 @@ public partial class MainWindow : Window
             gridMainPage.ColumnDefinitions[1].Width = visible;
         else
             gridMainPage.ColumnDefinitions[1].Width = collapsed;
+
+        //REFRESH ACTIVE ORDERS
+        GetActiveOrdersAsync();
+    }
+
+    private async void GetActiveOrdersAsync()
+    {
+        OrderManagement orderManagement = new(new GenericDataService<Order>(new RestaurantContextFactory()));
+        var pendingOrders = await orderManagement.GetActiveOrders();
+        lbxPendingOrders.Items.Clear();
+        foreach (var order in pendingOrders)
+        {
+            lbxPendingOrders.Items.Add(order);
+        }
+    }
+
+    private void lbxPendingOrders_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if(lbxPendingOrders.SelectedItem != null)
+        {
+            Order selectedOrder = (Order)lbxPendingOrders.SelectedItem;
+            OrderDetailsWindow orderDetailsWindow = new OrderDetailsWindow(selectedOrder);
+            orderDetailsWindow.ShowDialog();
+        }
+    }
+
+    private async void btnRefreshOrders_Click(object sender, RoutedEventArgs e)
+    {
+        GetActiveOrdersAsync();
     }
 }

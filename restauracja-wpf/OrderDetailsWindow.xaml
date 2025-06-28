@@ -1,0 +1,16 @@
+﻿<Window x:Class="restauracja_wpf.OrderDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:restauracja_wpf"
+        mc:Ignorable="d"
+        Title="Szczegóły zamówienia" Height="450" Width="400">
+    <Grid>
+        <StackPanel>
+            <ListBox Name="OrderListBox" Margin="10" Height="350"/>
+            <Button Name="btnAcceptOrder" Content="Zatwierdź zamówienie" Margin="10" Height="30" Click="btnAcceptOrder_Click"/> 
+            
+        </StackPanel>
+    </Grid>
+</Window>

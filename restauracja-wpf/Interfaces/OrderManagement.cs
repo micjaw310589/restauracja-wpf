@@ -64,9 +64,8 @@ namespace restauracja_wpf.Interfaces
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
                 IEnumerable<Order> foundOrders = await context.Orders
-                    .Where(o => o.Status.ToString().Contains("InProgress")).ToListAsync();
+                    .Where(o => o.Status.Name.Contains("InProgress") || o.Status.Name.Contains("SendedToKitchen")).ToListAsync();
                     
-
                 return foundOrders;
             }
         }

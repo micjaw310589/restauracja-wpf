@@ -8,8 +8,7 @@ namespace restauracja_wpf.Models
     {
         //public int OrderId { get; set; }
 
-        public int UserId { get; set; }
-        public bool IsToGo { get; set; }
+        public int? UserId { get; set; }
         //[Column(TypeName = "tinyint")]
         public int StatusId { get; set; }
         public OrderStatus Status { get; set; } = null!;

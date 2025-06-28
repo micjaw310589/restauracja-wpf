@@ -12,8 +12,8 @@ using restauracja_wpf.Data;
 namespace restauracja_wpf.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    [Migration("20250612235449_init4")]
-    partial class init4
+    [Migration("20250628220001_Order_NullableUserId")]
+    partial class Order_NullableUserId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -132,6 +132,9 @@ namespace restauracja_wpf.Migrations
                     b.Property<decimal>("PurchasePrice")
                         .HasColumnType("decimal(5, 2)");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("Id", "DishId");
 
                     b.HasIndex("DishId");
@@ -153,9 +156,6 @@ namespace restauracja_wpf.Migrations
                     b.Property<byte?>("DeliveryNumber")
                         .HasColumnType("tinyint");
 
-                    b.Property<bool>("IsToGo")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime");
 
@@ -171,7 +171,7 @@ namespace restauracja_wpf.Migrations
                     b.Property<int?>("TableId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -462,9 +462,7 @@ namespace restauracja_wpf.Migrations
 
                     b.HasOne("restauracja_wpf.Models.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("RegularCustomer");
 

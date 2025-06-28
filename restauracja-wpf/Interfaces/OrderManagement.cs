@@ -44,7 +44,7 @@ namespace restauracja_wpf.Interfaces
                 await _orderService.Create(new Order()
                 {
                     UserId = userId,
-                    IsToGo = isToGo,
+                    //IsToGo = isToGo,
                     StatusId = statusId,
                     Status = status,
                     User = user,

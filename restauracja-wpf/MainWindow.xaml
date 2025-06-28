@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:restauracja_wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="600" MinWidth="600" MinHeight="500">
+        Title="MainWindow" Height="600" Width="700" MinWidth="700" MinHeight="600">
     <Grid>
         <TabControl>
             <TabItem x:Name="tabMain" Header="Main Page">
@@ -31,8 +31,32 @@
 
                         </StackPanel>
                     </StackPanel>
+
                     <GroupBox Grid.Column="1" Header="Place an order">
-                        
+                        <StackPanel>
+                            <Label Content="Menu:"/>
+                            <ListBox x:Name="lbxMenu" d:ItemsSource="{d:SampleData ItemCount=5}" Height="166" SelectionMode="Extended"/>
+                            <Label />
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="btnAddToOrder" Content="Add to order" Click="btnAddToOrder_Click"/>
+                                <Label />
+                                <Button x:Name="btnRefreshMenu" Content="Refresh" Click="btnRefreshMenu_Click"/>
+                            </StackPanel>
+                            <Label Content="Your Order:"/>
+                            <ListBox x:Name="lbxOrder" d:ItemsSource="{d:SampleData ItemCount=5}" Height="110" SelectionMode="Extended"/>
+                            <Label />
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="btnRemoveFromOrder" Content="Remove from order" Click="btnRemoveFromOrder_Click"/>
+                                <Label />
+                                <Button x:Name="btnMinus1" Content="- 1" Click="btnMinus1_Click"/>
+                                <Label />
+                                <Button x:Name="btnPlus1" Content="+ 1" Click="btnPlus1_Click"/>
+                            </StackPanel>
+                            <Label Content="Total price:"/>
+                            <TextBlock x:Name="txtTotalPrice" Text="0,00 zł" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                            <Label />
+                            <Button x:Name="btnPlaceOrder" Content="Place Order" Click="btnPlaceOrder_Click" />
+                        </StackPanel>
                     </GroupBox>
 
                 </Grid>

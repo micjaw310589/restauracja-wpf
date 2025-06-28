@@ -16,6 +16,7 @@ using restauracja_wpf.Models;
 using restauracja_wpf.Services;
 using System.Text.RegularExpressions;
 using restauracja_wpf.Interfaces;
+using System.Diagnostics.Contracts;
 
 namespace restauracja_wpf;
 
@@ -592,14 +593,189 @@ public partial class MainWindow : Window
         }
     }
 
+    private void recalculateOrderPrice(ref decimal totalPrice)
+    {
+        foreach (var item in lbxOrder.Items.Cast<string>().ToList())
+        {
+            totalPrice += Convert.ToDecimal(item.Split(" - ")[2].Split(' ')[0]) * Convert.ToInt32(item.Split(' ')[0].Trim('(', ')'));
+        }
+
+    }
+
     private void btnNewOrder_Click(object sender, RoutedEventArgs e)
     {
         GridLength currentColumnWidth = gridMainPage.ColumnDefinitions[1].Width;
         GridLength collapsed = new (0, GridUnitType.Star);
         GridLength visible = new (1, GridUnitType.Star);
         if (currentColumnWidth == collapsed)
+        {
+            btnRefreshMenu_Click(sender, e);
             gridMainPage.ColumnDefinitions[1].Width = visible;
+        }
         else
             gridMainPage.ColumnDefinitions[1].Width = collapsed;
+    }
+
+    private void btnAddToOrder_Click(object sender, RoutedEventArgs e)
+    {
+        var selectedItems = lbxMenu.SelectedItems.Cast<string>().ToList();
+        decimal totalPrice = 0.0M;
+        int counter = 1;
+        bool found = false;
+
+        foreach (var item in selectedItems)
+        {
+            if (lbxOrder.Items.IsEmpty)
+            {
+                lbxOrder.Items.Add("(" + counter + ") " + item);
+                continue;
+            }
+
+            //lbxOrder.Items.Cast<string>().ToList().ForEach(existingItem =>
+            //{
+            //    if (Convert.ToInt32(existingItem.Split(' ')[1]) == Convert.ToInt32(item.Split(' ')[0]))
+            //    {
+            //        counter = Convert.ToInt32(existingItem.Split(' ')[0].Trim('(', ')'));
+            //        counter++;
+            //        lbxOrder.Items.Remove(existingItem);
+            //        lbxOrder.Items.Add("(" + counter + ") " + item);
+            //    }
+            //});
+
+            foreach (var existingItem in lbxOrder.Items.Cast<string>().ToList())
+            {
+                if (Convert.ToInt32(existingItem.Split(' ')[1]) == Convert.ToInt32(item.Split(' ')[0]))
+                {
+                    counter = Convert.ToInt32(existingItem.Split(' ')[0].Trim('(', ')'));
+                    counter++;
+                    lbxOrder.Items.Remove(existingItem);
+                    lbxOrder.Items.Add("(" + counter + ") " + item);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                counter = 1;
+                lbxOrder.Items.Add("(" + counter + ") " + item);
+            }
+        }
+
+        recalculateOrderPrice(ref totalPrice);
+        txtTotalPrice.Text = totalPrice.ToString("F2") + " zł";
+
+    }
+
+    private async void btnRefreshMenu_Click(object sender, RoutedEventArgs e)
+    {
+        GenericDataService<Dish> dishService = new(new RestaurantContextFactory());
+        lbxMenu.Items.Clear();
+        lbxMenu.SelectedItem = null;
+        var all_dishes = await dishService.GetAll();
+        foreach (var dish in all_dishes)
+        {
+            if (!dish.Exclude)
+            {
+                lbxMenu.Items.Add($"{dish.Id} - {dish.Name} - {dish.Price} zł - (ToS: {dish.TimeConstant})");
+            }
+        }
+    }
+
+    private void btnRemoveFromOrder_Click(object sender, RoutedEventArgs e)
+    {
+        lbxOrder.SelectedItems.Cast<string>().ToList().ForEach(item => lbxOrder.Items.Remove(item));
+
+        decimal totalPrice = 0.0M;
+
+        recalculateOrderPrice(ref totalPrice);
+
+        txtTotalPrice.Text = totalPrice.ToString("F2") + " zł";
+    }
+
+    private async void btnPlaceOrder_Click(object sender, RoutedEventArgs e)
+    {
+        GenericDataService<Dish> dishService = new(new RestaurantContextFactory());
+        GenericDataService<Order> orderService = new(new RestaurantContextFactory());
+        List<DishOrder> dishOrders = new List<DishOrder>();
+
+        foreach (var item in lbxOrder.Items.Cast<string>().ToList())
+        {
+            int dishId = Convert.ToInt32(item.Split(" ")[1]);
+            Dish searchForDish = await dishService.Get(dishId);
+
+            if (searchForDish != null)
+            {
+                dishOrders.Add(new DishOrder
+                {
+                    DishId = searchForDish.Id,
+                    Quantity = Convert.ToInt32(item.Split(' ')[0].Trim('(', ')')),
+                    PurchasePrice = searchForDish.Price * Convert.ToInt32(item.Split(' ')[0].Trim('(', ')'))
+                });
+            }
+            else
+            {
+                MessageBox.Show($"Dish not found in DB. Aborting.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+        }
+
+        Order newOrder = new Order
+        {
+            UserId = null,
+            StatusId = 1,
+            OrderDate = DateTime.Now,
+            DishOrders = dishOrders
+        };
+
+        await orderService.Create(newOrder);
+
+        lbxOrder.Items.Clear();
+        txtTotalPrice.Text = "0.00 zł";
+    }
+
+    private void btnPlus1_Click(object sender, RoutedEventArgs e)
+    {
+        if (lbxOrder.SelectedItem == null)
+        {
+            return;
+        }
+
+
+        var selectedItem = lbxOrder.SelectedItem;
+        int counter = Convert.ToInt32(selectedItem.ToString().Split(' ')[0].Trim('(', ')'));
+        counter++;
+        lbxOrder.Items.Remove(selectedItem);
+        lbxOrder.Items.Add("(" + counter + ") " + selectedItem.ToString().Substring(selectedItem.ToString().IndexOf(' ') + 1));
+      
+        decimal totalPrice = 0.0M;
+        recalculateOrderPrice(ref totalPrice);
+        txtTotalPrice.Text = totalPrice.ToString("F2") + " zł";
+    }
+
+    private void btnMinus1_Click(object sender, RoutedEventArgs e)
+    {
+        if (lbxOrder.SelectedItem == null)
+        {
+            return;
+        }
+
+        var selectedItem = lbxOrder.SelectedItem;
+        int counter = Convert.ToInt32(selectedItem.ToString().Split(' ')[0].Trim('(', ')'));
+        counter--;
+
+        if (counter <= 0)
+        {
+            lbxOrder.Items.Remove(selectedItem);
+        }
+        else
+        {
+            lbxOrder.Items.Remove(selectedItem);
+            lbxOrder.Items.Add("(" + counter + ") " + selectedItem.ToString().Substring(selectedItem.ToString().IndexOf(' ') + 1));
+        }
+
+        decimal totalPrice = 0.0M;
+        recalculateOrderPrice(ref totalPrice);
+        txtTotalPrice.Text = totalPrice.ToString("F2") + " zł";
     }
 }

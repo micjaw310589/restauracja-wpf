@@ -12,6 +12,9 @@ namespace restauracja_wpf.Models
         public int DishId { get; set; }
         public Dish Dish { get; set; } = null!;
 
+        public int Quantity { get; set; } = 1;
+
+
         [Column(TypeName = "decimal(5, 2)")]
         public decimal PurchasePrice { get; set; }
 

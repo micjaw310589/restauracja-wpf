@@ -37,6 +37,7 @@ namespace restauracja_wpf.Migrations
                     Available = table.Column<bool>(type: "bit", nullable: false),
                     TimeConstant = table.Column<TimeSpan>(type: "time", nullable: true),
                     TimeCalculated = table.Column<TimeSpan>(type: "time", nullable: true),
+                    IsTimeCalculated = table.Column<bool>(type: "bit", nullable: false),
                     DishOfTheDay = table.Column<bool>(type: "bit", nullable: false),
                     Exclude = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -97,7 +98,7 @@ namespace restauracja_wpf.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -158,7 +159,7 @@ namespace restauracja_wpf.Migrations
                     PasswordHash = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: true),
                     RestaurantId = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -174,8 +175,7 @@ namespace restauracja_wpf.Migrations
                         name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -209,13 +209,13 @@ namespace restauracja_wpf.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
                     ReservationId = table.Column<int>(type: "int", nullable: true),
                     RegularCustomerId = table.Column<int>(type: "int", nullable: true),
-                    TableId = table.Column<int>(type: "int", nullable: false),
+                    TableId = table.Column<int>(type: "int", nullable: true),
                     OrderDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     DeliveryDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    DeliveryNumber = table.Column<byte>(type: "tinyint", nullable: true),
-                    StatusId = table.Column<int>(type: "int", nullable: false)
+                    DeliveryNumber = table.Column<byte>(type: "tinyint", nullable: true)
                 },
                 constraints: table =>
                 {

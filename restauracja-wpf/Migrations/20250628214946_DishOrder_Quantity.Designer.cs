@@ -12,8 +12,8 @@ using restauracja_wpf.Data;
 namespace restauracja_wpf.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    [Migration("20250609215235_init2")]
-    partial class init2
+    [Migration("20250628214946_DishOrder_Quantity")]
+    partial class DishOrder_Quantity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,6 +96,9 @@ namespace restauracja_wpf.Migrations
                     b.Property<bool>("Exclude")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsTimeCalculated")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -128,6 +131,9 @@ namespace restauracja_wpf.Migrations
 
                     b.Property<decimal>("PurchasePrice")
                         .HasColumnType("decimal(5, 2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "DishId");
 
@@ -162,7 +168,7 @@ namespace restauracja_wpf.Migrations
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TableId")
+                    b.Property<int?>("TableId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -191,8 +197,8 @@ namespace restauracja_wpf.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -374,7 +380,7 @@ namespace restauracja_wpf.Migrations
                     b.Property<int?>("RestaurantId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Status")
@@ -497,9 +503,7 @@ namespace restauracja_wpf.Migrations
 
                     b.HasOne("restauracja_wpf.Models.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Restaurant");
 

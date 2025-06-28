@@ -614,6 +614,41 @@ public partial class MainWindow : Window
         }
         else
             gridMainPage.ColumnDefinitions[1].Width = collapsed;
+
+        //REFRESH ACTIVE ORDERS
+        GetActiveOrdersAsync();
+    }
+
+    private async void GetActiveOrdersAsync()
+    {
+        OrderManagement orderManagement = new(new GenericDataService<Order>(new RestaurantContextFactory()));
+        var pendingOrders = await orderManagement.GetActiveOrders();
+        pendingOrders = await filtrujListę(pendingOrders, o => o.Status.Name == "Placed" || o.Status.Name == "In progress" || o.Status.Name == "Accepted");
+        lbxPendingOrders.Items.Clear();
+        foreach (var order in pendingOrders)
+        {
+            lbxPendingOrders.Items.Add(order);
+        }
+    }
+
+    private async Task<IEnumerable<T>> filtrujListę<T>(IEnumerable<T> lista, Func<T, bool> warunek)
+    {
+        return await Task.Run(() => lista.Where(warunek));
+    }
+
+    private void lbxPendingOrders_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if(lbxPendingOrders.SelectedItem != null)
+        {
+            Order selectedOrder = (Order)lbxPendingOrders.SelectedItem;
+            OrderDetailsWindow orderDetailsWindow = new OrderDetailsWindow(selectedOrder);
+            orderDetailsWindow.ShowDialog();
+        }
+    }
+
+    private async void btnRefreshOrders_Click(object sender, RoutedEventArgs e)
+    {
+        GetActiveOrdersAsync();
     }
 
     private void btnAddToOrder_Click(object sender, RoutedEventArgs e)

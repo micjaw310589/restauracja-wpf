@@ -16,7 +16,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
                         <Label/>
-                        <ListBox x:Name="lbxPendingOrders" Height="369" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="OnSelected"/>
+                        <ListBox x:Name="lbxPendingOrders" Height="369" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="OnSelected" MouseDoubleClick="lbxPendingOrders_MouseDoubleClick"/>
                         <Label/>
                         <StackPanel Orientation="Horizontal">
                             <Button x:Name="btnNewOrder" Content="New Order" Click="btnNewOrder_Click"/>
@@ -26,6 +26,8 @@
                             <Button x:Name="btnRejectOrder" Content="Reject"/>
                             <Label/>
                             <Button x:Name="btnCancelOrder" Content="Cancel"/>
+                            <Label/>
+                            <Button x:Name="btnRefreshOrders" Content="Refresh" Click="btnRefreshOrders_Click"/>
                             <Label/>
                             <!--<Button x:Name="btnSetNewOrdersInDB" Content="Set Statuses DB" Click="btnSetNewOrdersInDB_Click" Visibility="Collapsed"/>-->
 

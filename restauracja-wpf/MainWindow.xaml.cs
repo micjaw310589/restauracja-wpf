@@ -610,11 +610,17 @@ public partial class MainWindow : Window
     {
         OrderManagement orderManagement = new(new GenericDataService<Order>(new RestaurantContextFactory()));
         var pendingOrders = await orderManagement.GetActiveOrders();
+        pendingOrders = await filtrujListę(pendingOrders, o => o.Status.Name == "Placed" || o.Status.Name == "In progress" || o.Status.Name == "Accepted");
         lbxPendingOrders.Items.Clear();
         foreach (var order in pendingOrders)
         {
             lbxPendingOrders.Items.Add(order);
         }
+    }
+
+    private async Task<IEnumerable<T>> filtrujListę<T>(IEnumerable<T> lista, Func<T, bool> warunek)
+    {
+        return await Task.Run(() => lista.Where(warunek));
     }
 
     private void lbxPendingOrders_MouseDoubleClick(object sender, MouseButtonEventArgs e)

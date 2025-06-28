@@ -347,27 +347,27 @@ public partial class MainWindow : Window
 
     }
 
-    private async void btnSetNewOrdersInDB_Click(object sender, RoutedEventArgs e)
-    {
-        string[] Statuses = ["WaitingForPayment", "SendedToKitchen", "InProgress", "Cancelled", "GivenAway", "InDelivery", "Delivered"];
-        StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
-        statusManagement.ClearAll();
-        foreach (string stat in Statuses)
-        {
-            statusManagement.AddStatus(stat);
-        }
+    //private async void btnSetNewOrdersInDB_Click(object sender, RoutedEventArgs e)
+    //{
+    //    string[] Statuses = ["Placed", "Rejected", "In progress", "Done", "Served", "Cancelled"];
+    //    StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
+    //    statusManagement.ClearAll();
+    //    foreach (string stat in Statuses)
+    //    {
+    //        statusManagement.AddStatus(stat);
+    //    }
 
-        //--------ADD ROLES-----------
+    //    //--------ADD ROLES-----------
 
-        string[] Roles = ["Admin", "Manager", "Waiter", "Cook"];
-        RoleManagement roleManagement = new(new GenericDataService<Role>(new RestaurantContextFactory()));
-        roleManagement.ClearRoles();
-        foreach (string role in Roles) {
-            roleManagement.AddRole(role);
-        }
+    //    string[] Roles = ["Admin", "Manager", "Waiter", "Cook"];
+    //    RoleManagement roleManagement = new(new GenericDataService<Role>(new RestaurantContextFactory()));
+    //    roleManagement.ClearRoles();
+    //    foreach (string role in Roles) {
+    //        roleManagement.AddRole(role);
+    //    }
 
-        MessageBox.Show("Done!");
-    }
+    //    MessageBox.Show("Done!");
+    //}
 
     private async void btnManageOrder_Click(object sender, RoutedEventArgs e, IEnumerable<Order> orders2, IEnumerable<Order> orders)
     {
@@ -570,11 +570,6 @@ public partial class MainWindow : Window
         }
     }
 
-    private void btnManageOrder_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
-
     private async void btnDeleteDish_Click(object sender, RoutedEventArgs e)
     {
         DishDataService dishService = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
@@ -595,5 +590,16 @@ public partial class MainWindow : Window
                 }
             }
         }
+    }
+
+    private void btnNewOrder_Click(object sender, RoutedEventArgs e)
+    {
+        GridLength currentColumnWidth = gridMainPage.ColumnDefinitions[1].Width;
+        GridLength collapsed = new (0, GridUnitType.Star);
+        GridLength visible = new (1, GridUnitType.Star);
+        if (currentColumnWidth == collapsed)
+            gridMainPage.ColumnDefinitions[1].Width = visible;
+        else
+            gridMainPage.ColumnDefinitions[1].Width = collapsed;
     }
 }

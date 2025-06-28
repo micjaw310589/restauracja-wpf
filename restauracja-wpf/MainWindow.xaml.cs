@@ -741,7 +741,6 @@ public partial class MainWindow : Window
             return;
         }
 
-
         var selectedItem = lbxOrder.SelectedItem;
         int counter = Convert.ToInt32(selectedItem.ToString().Split(' ')[0].Trim('(', ')'));
         counter++;

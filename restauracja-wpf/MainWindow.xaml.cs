@@ -244,7 +244,7 @@ public partial class MainWindow : Window
             return; // throw new Exception("Please enter a dish name to search.");
         }
 
-        var dishes = await dishService.GetMatchingDishes(dishname);
+        var dishes = await dishService.GetDishesByName(dishname);
 
         if (dishes == default || dishes == null)
         {
@@ -582,7 +582,7 @@ public partial class MainWindow : Window
                 string[] selectedDish = lbxDishSearchResults.SelectedItem.ToString().Split(" ");
                 try
                 {
-                    await dishService.DeleteDish(Convert.ToInt32(selectedDish[0]));
+                    await dishService.Delete(Convert.ToInt32(selectedDish[0]));
                     MessageBox.Show("Dish deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (FormatException)

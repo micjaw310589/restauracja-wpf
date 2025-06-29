@@ -9,5 +9,6 @@ namespace restauracja_wpf.Models
     public class DomainObject
     {
         public int Id { get; set; }
+        public bool isDeleted { get; set; } = false;
     }
 }

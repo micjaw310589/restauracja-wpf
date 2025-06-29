@@ -25,60 +25,39 @@ namespace restauracja_wpf.Services
             }
         }
 
-        public async Task<IEnumerable<Dish>> GetMatchingDishes(string name)
+        public async Task<IEnumerable<Dish>> GetDishesByName(string name)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
                 IEnumerable<Dish> foundDishes = await context.Set<Dish>()
                     .Where(d => d.Name.Contains(name))
-                    .ToListAsync();
-                return foundDishes;
-            }
-        }
-
-        public async Task<IEnumerable<Dish>> GetAllDishes()
-        {
-            using (var context = new RestaurantContextFactory().CreateDbContext())
-            {
-                IEnumerable<Dish> foundDishes = await context.Set<Dish>().ToListAsync();
-                return foundDishes;
-            }
-        }
-
-        public async Task<IEnumerable<Dish>> GetAllAvalibleDishes()
-        {
-            using (var context = new RestaurantContextFactory().CreateDbContext())
-            {
-                IEnumerable<Dish> foundDishes = await context.Set<Dish>()
+                    .Where(d => d.Exclude == false)
                     .Where(d => d.Available == true)
+                    .Where(d => d.isDeleted == false)
                     .ToListAsync();
                 return foundDishes;
             }
         }
 
-        public async Task<Dish> GetDish(int id)
+        public async Task<IEnumerable<Dish>> GetAllDishes(bool onlyAvailable)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
-                Dish dish = await context.Set<Dish>().FirstOrDefaultAsync((d) => d.Id == id);
-                return dish;
-            }
-        }
+                IEnumerable<Dish> foundDishes;
 
-        public async Task<bool> DeleteDish(int id)
-        {
-            using (var context = new RestaurantContextFactory().CreateDbContext())
-            {
-                Dish dish = await context.Set<Dish>().FirstOrDefaultAsync((d) => d.Id == id);
-                if (dish == null)
+                if (onlyAvailable)
                 {
-                    return false; // Dish not found
+                    foundDishes = await context.Set<Dish>()
+                        .Where(d => d.Available == true)
+                        .Where(d => d.Exclude == false)
+                        .Where(d => d.isDeleted == false)
+                        .ToListAsync();
                 }
-                context.Set<Dish>().Remove(dish);
-                await context.SaveChangesAsync();
-                return true;
-            }
+                else
+                    foundDishes = await context.Set<Dish>().ToListAsync();
 
+                return foundDishes;
+            }
         }
 
     }

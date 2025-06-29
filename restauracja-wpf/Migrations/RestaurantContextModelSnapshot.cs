@@ -71,6 +71,9 @@ namespace restauracja_wpf.Migrations
                     b.Property<short>("OrderThreshold")
                         .HasColumnType("smallint");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Discounts");
@@ -110,6 +113,9 @@ namespace restauracja_wpf.Migrations
                     b.Property<TimeSpan?>("TimeConstant")
                         .HasColumnType("time");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Menu");
@@ -131,6 +137,9 @@ namespace restauracja_wpf.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id", "DishId");
 
@@ -171,6 +180,9 @@ namespace restauracja_wpf.Migrations
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RegularCustomerId");
@@ -196,6 +208,9 @@ namespace restauracja_wpf.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -234,6 +249,9 @@ namespace restauracja_wpf.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DiscountId");
@@ -268,6 +286,9 @@ namespace restauracja_wpf.Migrations
                     b.Property<int>("TableId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Reservations");
@@ -299,6 +320,9 @@ namespace restauracja_wpf.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Restaurants");
@@ -316,6 +340,9 @@ namespace restauracja_wpf.Migrations
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -338,6 +365,9 @@ namespace restauracja_wpf.Migrations
 
                     b.Property<int>("TableNumber")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -381,6 +411,9 @@ namespace restauracja_wpf.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");

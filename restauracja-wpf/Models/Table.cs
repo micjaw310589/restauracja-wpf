@@ -17,5 +17,6 @@ namespace restauracja_wpf.Models
 
         public List<Reservation> Reservations { get; set; } = new List<Reservation>();
         public List<Order> Orders { get; set; } = new List<Order>();
+
     }
 }

@@ -28,5 +28,6 @@ namespace restauracja_wpf.Models
         public bool Exclude { get; set; } = false;
 
         public List<DishOrder> DishOrders { get; set; } = new List<DishOrder>();
+
     }
 }

@@ -33,6 +33,19 @@ namespace restauracja_wpf.Services
         {
             using (RestaurantContext context = _contextfactory.CreateDbContext())
             {
+                // Soft delete implementation
+                T entity = await context.Set<T>().FirstOrDefaultAsync((e) => e.Id == id);
+                entity.isDeleted = true;
+                context.Set<T>().Update(entity);
+                await context.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        public async Task<bool> HardDelete(int id)
+        {
+            using (RestaurantContext context = _contextfactory.CreateDbContext())
+            {
                 T entity = await context.Set<T>().FirstOrDefaultAsync((e) => e.Id == id);
                 context.Set<T>().Remove(entity);
                 await context.SaveChangesAsync();
@@ -45,6 +58,12 @@ namespace restauracja_wpf.Services
             using (RestaurantContext context = _contextfactory.CreateDbContext())
             {
                 T entity = await context.Set<T>().FirstOrDefaultAsync((e) => e.Id == id);
+
+                if (entity == null || entity.isDeleted)
+                {
+                    throw new KeyNotFoundException($"Entity with id {id} not found or has been deleted.");
+                }
+
                 return entity;
             }
         }
@@ -54,6 +73,8 @@ namespace restauracja_wpf.Services
             using (RestaurantContext context = _contextfactory.CreateDbContext())
             {
                 IEnumerable<T> entities = await context.Set<T>().ToListAsync();
+                entities = entities.Where(e => !e.isDeleted);
+
                 return entities;
             }
         }

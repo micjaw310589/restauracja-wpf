@@ -33,5 +33,6 @@ namespace restauracja_wpf.Models
 
         public List<DishOrder> DishOrders { get; set; } = new List<DishOrder>();
         public List<Table> Tables { get; set; } = new List<Table>();
+
     }
 }

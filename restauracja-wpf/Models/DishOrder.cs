@@ -19,5 +19,6 @@ namespace restauracja_wpf.Models
         public decimal PurchasePrice { get; set; }
 
         public bool IsDiscountable { get; set; } = false;
+
     }
 }

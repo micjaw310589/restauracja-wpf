@@ -30,5 +30,6 @@ namespace restauracja_wpf.Models
 
 
         public List<Order> Orders { get; set; } = new List<Order>();
+
     }
 }

@@ -24,5 +24,6 @@ namespace restauracja_wpf.Models
         public DateTime? EndDate { get; set; } = null;
 
         public List<Order> Orders { get; set; } = new List<Order>();
+
     }
 }

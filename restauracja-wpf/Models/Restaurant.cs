@@ -21,5 +21,6 @@ namespace restauracja_wpf.Models
 
         public List<User> Users { get; set; } = new List<User>();
         public List<Table> Tables { get; set; } = new List<Table>();
+
     }
 }

@@ -21,11 +21,11 @@
                         <StackPanel Orientation="Horizontal">
                             <Button x:Name="btnNewOrder" Content="New Order" Click="btnNewOrder_Click"/>
                             <Label/>
-                            <Button x:Name="btnAcceptOrder" Content="Accept"/>
+                            <Button x:Name="btnAcceptOrder" Content="Accept" Click="btnAcceptOrder_Click"/>
                             <Label/>
-                            <Button x:Name="btnRejectOrder" Content="Reject"/>
+                            <Button x:Name="btnRejectOrder" Content="Reject" Click="btnRejectOrder_Click"/>
                             <Label/>
-                            <Button x:Name="btnCancelOrder" Content="Cancel"/>
+                            <Button x:Name="btnCancelOrder" Content="Cancel" Click="btnCancelOrder_Click"/>
                             <Label/>
                             <Button x:Name="btnRefreshOrders" Content="Refresh" Click="btnRefreshOrders_Click"/>
                             <Label/>

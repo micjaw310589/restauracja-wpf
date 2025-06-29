@@ -806,4 +806,73 @@ public partial class MainWindow : Window
         recalculateOrderPrice(ref totalPrice);
         txtTotalPrice.Text = totalPrice.ToString("F2") + " zł";
     }
+
+    private async void btnAcceptOrder_Click(object sender, RoutedEventArgs e)
+    {
+        if(lbxPendingOrders.SelectedItem == null)
+        {
+            return;
+        }
+
+        GenericDataService<Order> orderService = new(new RestaurantContextFactory());
+        Order selectedOrder = orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0])).Result;
+        if (selectedOrder != null)
+        {
+            StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
+            selectedOrder.StatusId = await statusManagement.GetStatusIdByName("In progress");
+            orderService.Update(selectedOrder.Id, selectedOrder);
+            MessageBox.Show("Order accepted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            GetActiveOrdersAsync(); // Refresh the list of active orders
+        }
+        else
+        {
+            MessageBox.Show("Selected order not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async void btnRejectOrder_Click(object sender, RoutedEventArgs e)
+    {
+        if (lbxPendingOrders.SelectedItem == null)
+        {
+            return;
+        }
+
+        GenericDataService<Order> orderService = new(new RestaurantContextFactory());
+        Order selectedOrder = orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0])).Result;
+        if (selectedOrder != null)
+        {
+            StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
+            selectedOrder.StatusId = await statusManagement.GetStatusIdByName("Rejected");
+            orderService.Update(selectedOrder.Id, selectedOrder);
+            MessageBox.Show("Order accepted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            GetActiveOrdersAsync(); // Refresh the list of active orders
+        }
+        else
+        {
+            MessageBox.Show("Selected order not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async void btnCancelOrder_Click(object sender, RoutedEventArgs e)
+    {
+        if (lbxPendingOrders.SelectedItem == null)
+        {
+            return;
+        }
+
+        GenericDataService<Order> orderService = new(new RestaurantContextFactory());
+        Order selectedOrder = orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0])).Result;
+        if (selectedOrder != null)
+        {
+            StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
+            selectedOrder.StatusId = await statusManagement.GetStatusIdByName("Cancelled");
+            orderService.Update(selectedOrder.Id, selectedOrder);
+            MessageBox.Show("Order accepted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            GetActiveOrdersAsync(); // Refresh the list of active orders
+        }
+        else
+        {
+            MessageBox.Show("Selected order not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
 }

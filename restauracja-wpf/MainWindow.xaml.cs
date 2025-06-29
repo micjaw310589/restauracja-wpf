@@ -29,6 +29,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         FillUpComboBoxAsync();
+        GetActiveOrdersAsync();
     }
 
     private void PreviewNumericInput(object sender, TextCompositionEventArgs e)
@@ -623,24 +624,24 @@ public partial class MainWindow : Window
     {
         OrderManagement orderManagement = new(new GenericDataService<Order>(new RestaurantContextFactory()));
         var pendingOrders = await orderManagement.GetActiveOrders();
-        pendingOrders = await filtrujListę(pendingOrders, o => o.Status.Name == "Placed" || o.Status.Name == "In progress" || o.Status.Name == "Accepted");
+        //pendingOrders = await filtrujListę(pendingOrders, o => o.Status.Name == "Placed" || o.Status.Name == "In progress" || o.Status.Name == "Accepted");
+        //"Placed", "Rejected", "In progress", "Done", "Served", "Cancelled"
         lbxPendingOrders.Items.Clear();
+        lbxPendingOrders.SelectedItem = null;
         foreach (var order in pendingOrders)
         {
-            lbxPendingOrders.Items.Add(order);
+            int dish_count = order.DishOrders.Sum(dishOrder => dishOrder.Quantity);
+            decimal sum = order.DishOrders.Sum(dishOrder => dishOrder.PurchasePrice);
+            lbxPendingOrders.Items.Add($"{order.Id} - Status: {order.Status.Name} - {order.OrderDate} - Dania: {order.DishOrders.Count} - Cena: {sum} zł");
         }
     }
 
-    private async Task<IEnumerable<T>> filtrujListę<T>(IEnumerable<T> lista, Func<T, bool> warunek)
-    {
-        return await Task.Run(() => lista.Where(warunek));
-    }
-
-    private void lbxPendingOrders_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private async void lbxPendingOrders_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if(lbxPendingOrders.SelectedItem != null)
         {
-            Order selectedOrder = (Order)lbxPendingOrders.SelectedItem;
+            GenericDataService<Order> orderService = new(new RestaurantContextFactory());
+            Order selectedOrder = await orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0]));
             OrderDetailsWindow orderDetailsWindow = new OrderDetailsWindow(selectedOrder);
             orderDetailsWindow.ShowDialog();
         }
@@ -665,17 +666,6 @@ public partial class MainWindow : Window
                 lbxOrder.Items.Add("(" + counter + ") " + item);
                 continue;
             }
-
-            //lbxOrder.Items.Cast<string>().ToList().ForEach(existingItem =>
-            //{
-            //    if (Convert.ToInt32(existingItem.Split(' ')[1]) == Convert.ToInt32(item.Split(' ')[0]))
-            //    {
-            //        counter = Convert.ToInt32(existingItem.Split(' ')[0].Trim('(', ')'));
-            //        counter++;
-            //        lbxOrder.Items.Remove(existingItem);
-            //        lbxOrder.Items.Add("(" + counter + ") " + item);
-            //    }
-            //});
 
             foreach (var existingItem in lbxOrder.Items.Cast<string>().ToList())
             {

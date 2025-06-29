@@ -31,6 +31,33 @@ namespace restauracja_wpf
         public OrderDetailsWindow(Order order) : this()
         {
             order1 = order ?? throw new ArgumentNullException(nameof(order), "Order cannot be null.");
+            loadContent();
+        }
+
+        private async void loadContent() 
+        {  
+            if (order1 == null)
+            {
+                return;
+            }
+            OrderManagement orderManagement = new OrderManagement(new GenericDataService<Order>(new RestaurantContextFactory()));
+            IEnumerable<Order> orderDetails = await orderManagement.GetOrderDetails(order1.Id);
+            OrderListBox.Items.Clear();
+            foreach (var order in orderDetails)
+            {
+                OrderListBox.Items.Add($"{order.Id} - {order.Status} - {order.DeliveryNumber}");
+                foreach (var item in order.DishOrders)
+                {
+                    if (item == null || item.Dish == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        OrderListBox.Items.Add($"{item.Dish.Name} - {item.Quantity} szt. - {item.PurchasePrice} zł");
+                    }
+                }
+            }
         }
 
         private async void btnAcceptOrder_Click(object sender, RoutedEventArgs e)

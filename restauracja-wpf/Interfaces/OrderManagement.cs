@@ -79,6 +79,26 @@ namespace restauracja_wpf.Interfaces
                 return foundOrders;
             }
         }
+
+        public async Task<IEnumerable<Order>> GetOrderDetails(int Id)
+        {
+            using (var context = new RestaurantContextFactory().CreateDbContext())
+            {
+                //"Placed", "Rejected", "In progress", "Done", "Served", "Cancelled"
+                IEnumerable<Order> foundOrders = await context.Orders
+                    .Include(o => o.Status)
+                    .Include(o => o.User)
+                    .Include(o => o.Reservation)
+                    .Include(o => o.RegularCustomer)
+                    .Include(o => o.Tables)
+                    .Include(o => o.DishOrders)
+                        .ThenInclude(dor => dor.Dish)
+                        .Where(o => o.Id == Id)
+                    .ToListAsync();
+                return foundOrders;
+            }
+        }
+
         public async Task<IEnumerable<Order>> GetClosedOrders()
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())

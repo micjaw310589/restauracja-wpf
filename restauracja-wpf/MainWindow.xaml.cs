@@ -720,6 +720,10 @@ public partial class MainWindow : Window
 
     private async void btnPlaceOrder_Click(object sender, RoutedEventArgs e)
     {
+        if(lbxOrder.Items.IsEmpty)
+        {
+            return;
+        }
         GenericDataService<Dish> dishService = new(new RestaurantContextFactory());
         GenericDataService<Order> orderService = new(new RestaurantContextFactory());
         List<DishOrder> dishOrders = new List<DishOrder>();

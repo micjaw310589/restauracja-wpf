@@ -63,7 +63,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabLogin" Header="Log In" Visibility="Collapsed">
+            <TabItem x:Name="tabLogin" Header="Log In">
                 <Grid x:Name="txtLogin1">
                     <Grid.ColumnDefinitions>
 

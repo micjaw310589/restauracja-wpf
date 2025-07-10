@@ -815,13 +815,21 @@ public partial class MainWindow : Window
         }
 
         GenericDataService<Order> orderService = new(new RestaurantContextFactory());
-        Order selectedOrder = orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0])).Result;
+        Order selectedOrder = await orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0]));
         if (selectedOrder != null)
         {
             StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
             selectedOrder.StatusId = await statusManagement.GetStatusIdByName("In progress");
-            orderService.Update(selectedOrder.Id, selectedOrder);
-            MessageBox.Show("Order accepted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            if(MessageBox.Show("Accept?", "Question", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                orderService.Update(selectedOrder.Id, selectedOrder);
+                MessageBox.Show("Order accepted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+
+                MessageBox.Show("Operation cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
             GetActiveOrdersAsync(); // Refresh the list of active orders
         }
         else
@@ -838,13 +846,21 @@ public partial class MainWindow : Window
         }
 
         GenericDataService<Order> orderService = new(new RestaurantContextFactory());
-        Order selectedOrder = orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0])).Result;
+        Order selectedOrder = await orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0]));
         if (selectedOrder != null)
         {
             StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
             selectedOrder.StatusId = await statusManagement.GetStatusIdByName("Rejected");
-            orderService.Update(selectedOrder.Id, selectedOrder);
-            MessageBox.Show("Order accepted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (MessageBox.Show("Reject?", "Question", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                orderService.Update(selectedOrder.Id, selectedOrder);
+                MessageBox.Show("Order rejected successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+
+                MessageBox.Show("Operation cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
             GetActiveOrdersAsync(); // Refresh the list of active orders
         }
         else
@@ -861,13 +877,21 @@ public partial class MainWindow : Window
         }
 
         GenericDataService<Order> orderService = new(new RestaurantContextFactory());
-        Order selectedOrder = orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0])).Result;
+        Order selectedOrder = await orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0]));
         if (selectedOrder != null)
         {
             StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
             selectedOrder.StatusId = await statusManagement.GetStatusIdByName("Cancelled");
-            orderService.Update(selectedOrder.Id, selectedOrder);
-            MessageBox.Show("Order accepted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (MessageBox.Show("Cancell?", "Question", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                orderService.Update(selectedOrder.Id, selectedOrder);
+                MessageBox.Show("Order cancelled successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+
+                MessageBox.Show("Operation cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
             GetActiveOrdersAsync(); // Refresh the list of active orders
         }
         else

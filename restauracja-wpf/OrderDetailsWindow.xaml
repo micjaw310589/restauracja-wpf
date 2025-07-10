@@ -5,12 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:restauracja_wpf"
         mc:Ignorable="d"
-        Title="Szczegóły zamówienia" Height="450" Width="400">
+        Title="Szczegóły zamówienia" Height="500" Width="400" ResizeMode="NoResize">
     <Grid>
         <StackPanel>
-            <ListBox Name="OrderListBox" Margin="10" Height="350"/>
-            <Button Name="btnAcceptOrder" Content="Zatwierdź zamówienie" Margin="10" Height="30" Click="btnAcceptOrder_Click"/> 
-            
+            <ListBox Name="OrderListBox" Margin="10" Height="360"/>
+            <Button Name="btnTakeawayOrder" Content="Zatwierdź zamówienie" Margin="10" Height="30" Click="btnTakeawayOrder_Click"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="btnAcceptOrder_Kopiuj" Margin="10" Height="30" Content="Accept" Click="btnAcceptOrder_Click"/>
+                <Button x:Name="btnRejectOrder" Margin="10" Height="30" Content="Reject" Click="btnRejectOrder_Click"/>
+                <Button x:Name="btnCancelOrder" Margin="10" Height="30" Content="Cancel" Click="btnCancelOrder_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

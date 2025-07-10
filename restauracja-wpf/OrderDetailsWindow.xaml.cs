@@ -34,8 +34,8 @@ namespace restauracja_wpf
             loadContent();
         }
 
-        private async void loadContent() 
-        {  
+        private async void loadContent()
+        {
             if (order1 == null)
             {
                 return;
@@ -59,23 +59,83 @@ namespace restauracja_wpf
                 }
             }
         }
-
-        private async void btnAcceptOrder_Click(object sender, RoutedEventArgs e)
+        //"Placed", "Rejected", "In progress", "Done", "Served", "Cancelled"
+        private async void btnTakeawayOrder_Click(object sender, RoutedEventArgs e)
         {
-            if(MessageBox.Show("Czy chcesz potwierdzić wydanie zamówienia?", "Potwierdź:", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Czy chcesz potwierdzić wydanie zamówienia?", "Potwierdź:", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 GenericDataService<Order> orderManagement = new GenericDataService<Order>(new RestaurantContextFactory());
 
                 var statuses = await new GenericDataService<OrderStatus>(new RestaurantContextFactory()).GetAll();
-                var wydaneStatus = statuses.FirstOrDefault(s => s.Name == "Wydane");
+                var wydaneStatus = statuses.FirstOrDefault(s => s.Name == "Served");
                 order1.StatusId = wydaneStatus.Id;
                 orderManagement.Update(order1.Id, order1);
 
-                MessageBox.Show("Możesz wydać zamówienie.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Order taken away.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("Anulowano wydanie zamówienia.", "Anulowano", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Operation cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            this.Close();
+        }
+
+        private async void btnAcceptOrder_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Czy chcesz przyjąć zamówienie?", "Przyjmij:", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                GenericDataService<Order> orderManagement = new GenericDataService<Order>(new RestaurantContextFactory());
+
+                var statuses = await new GenericDataService<OrderStatus>(new RestaurantContextFactory()).GetAll();
+                var wydaneStatus = statuses.FirstOrDefault(s => s.Name == "In progress");
+                order1.StatusId = wydaneStatus.Id;
+                orderManagement.Update(order1.Id, order1);
+
+                MessageBox.Show("Order accepted", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Operation cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            this.Close();
+        }
+
+        private async void btnRejectOrder_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Czy chcesz odrzucić zamówienie?", "Potwierdź:", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                GenericDataService<Order> orderManagement = new GenericDataService<Order>(new RestaurantContextFactory());
+
+                var statuses = await new GenericDataService<OrderStatus>(new RestaurantContextFactory()).GetAll();
+                var wydaneStatus = statuses.FirstOrDefault(s => s.Name == "Rejected");
+                order1.StatusId = wydaneStatus.Id;
+                orderManagement.Update(order1.Id, order1);
+
+                MessageBox.Show("Order rejected", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Operation cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            this.Close();
+        }
+
+        private async void btnCancelOrder_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Czy chcesz potwierdzić wydanie zamówienia?", "Potwierdź:", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                GenericDataService<Order> orderManagement = new GenericDataService<Order>(new RestaurantContextFactory());
+
+                var statuses = await new GenericDataService<OrderStatus>(new RestaurantContextFactory()).GetAll();
+                var wydaneStatus = statuses.FirstOrDefault(s => s.Name == "In progress");
+                order1.StatusId = wydaneStatus.Id;
+                orderManagement.Update(order1.Id, order1);
+
+                MessageBox.Show("Order cancelled.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Operation cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             this.Close();
         }

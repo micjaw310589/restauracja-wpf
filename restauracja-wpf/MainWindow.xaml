@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:restauracja_wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="700" MinWidth="700" MinHeight="600">
+        Title="Jem-To-Dobre Panel zarządzania" Height="600" Width="700" MinWidth="700" MinHeight="600">
     <Grid>
         <TabControl>
             <TabItem x:Name="tabMain" Header="Main Page">

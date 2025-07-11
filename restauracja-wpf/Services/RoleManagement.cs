@@ -10,20 +10,14 @@ using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 namespace restauracja_wpf.Interfaces
 {
-    public class RoleManagement
+    public class RoleDataService(GenericDataService<Role> roleService) : GenericDataService<Role>(new RestaurantContextFactory())
     {
-        private readonly GenericDataService<Role> _roleService;
-
-        public RoleManagement(GenericDataService<Role> roleService)
-        {
-            _roleService = roleService;
-        }
 
         public async void AddRole(string name)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
-                await _roleService.Create(new Role()
+                await roleService.Create(new Role()
                 {
                     Name = name
                 });

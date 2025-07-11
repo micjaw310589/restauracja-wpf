@@ -13,19 +13,14 @@ using System.Windows.Media.Animation;
 
 namespace restauracja_wpf.Interfaces
 {
-    public class StatusManagement
+    public class StatusDataService(GenericDataService<OrderStatus> statusService) : GenericDataService<OrderStatus>(new RestaurantContextFactory())
     {
-        private readonly GenericDataService<OrderStatus> _statusService;
 
-        public StatusManagement(GenericDataService<OrderStatus> statusService) { 
-            _statusService = statusService;
-        }
-
-        public async void AddStatus(string name)
+        private async void AddStatus(string name)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
-                await _statusService.Create(new OrderStatus()
+                await statusService.Create(new OrderStatus()
                 {
                     Name = name
                 });

@@ -12,52 +12,8 @@ using System.Windows.Documents;
 
 namespace restauracja_wpf.Interfaces
 {
-    public class OrderManagement
+    public class OrderDataService(GenericDataService<Order> orderService) : GenericDataService<Order>(new RestaurantContextFactory())
     {
-        private readonly GenericDataService<Order> _orderService;
-
-        public OrderManagement(GenericDataService<Order> orderService)
-        {
-            _orderService = orderService;
-        }
-
-        public async void AddOrder(int userId,
-                                   bool isToGo,
-                                   int statusId,
-                                   OrderStatus status,
-                                   User user = null,
-                                   int? reservationId = null,
-                                   Reservation reservation = null,
-                                   int? regularCustomerId = null,
-                                   int? tableId = null,
-                                   DateTime? deliveryDate = null,
-                                   sbyte? deliveryNumber = null)
-        {
-            using (var context = new RestaurantContextFactory().CreateDbContext())
-            {
-                var foundTable = await context.Tables
-                    .FirstOrDefaultAsync(r => r.Id == tableId);
-
-                if (foundTable == null)
-                    throw new Exception("Table not found");
-
-                await _orderService.Create(new Order()
-                {
-                    UserId = userId,
-                    //IsToGo = isToGo,
-                    StatusId = statusId,
-                    Status = status,
-                    User = user,
-                    ReservationId = reservationId,
-                    Reservation = reservation,
-                    RegularCustomerId = regularCustomerId,
-                    TableId = tableId,
-                    DeliveryDate = deliveryDate,
-                    DeliveryNumber = deliveryNumber
-                });
-            }
-
-        }
 
         public async Task<IEnumerable<Order>> GetActiveOrders()
         {

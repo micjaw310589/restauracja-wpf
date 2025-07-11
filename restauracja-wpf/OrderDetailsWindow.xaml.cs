@@ -40,8 +40,8 @@ namespace restauracja_wpf
             {
                 return;
             }
-            OrderManagement orderManagement = new OrderManagement(new GenericDataService<Order>(new RestaurantContextFactory()));
-            IEnumerable<Order> orderDetails = await orderManagement.GetOrderDetails(order1.Id);
+            OrderDataService orderService = new(new GenericDataService<Order>(new RestaurantContextFactory()));
+            IEnumerable<Order> orderDetails = await orderService.GetOrderDetails(order1.Id);
             OrderListBox.Items.Clear();
             foreach (var order in orderDetails)
             {

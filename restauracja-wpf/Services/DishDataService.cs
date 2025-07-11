@@ -31,8 +31,6 @@ namespace restauracja_wpf.Services
             {
                 IEnumerable<Dish> foundDishes = await context.Set<Dish>()
                     .Where(d => d.Name.Contains(name))
-                    .Where(d => d.Exclude == false)
-                    .Where(d => d.Available == true)
                     .Where(d => d.isDeleted == false)
                     .ToListAsync();
                 return foundDishes;
@@ -45,16 +43,11 @@ namespace restauracja_wpf.Services
             {
                 IEnumerable<Dish> foundDishes;
 
-                if (onlyAvailable)
-                {
-                    foundDishes = await context.Set<Dish>()
-                        .Where(d => d.Available == true)
-                        .Where(d => d.Exclude == false)
-                        .Where(d => d.isDeleted == false)
-                        .ToListAsync();
-                }
-                else
-                    foundDishes = await context.Set<Dish>().ToListAsync();
+                foundDishes = await context.Set<Dish>()
+                    .Where(d => d.Available == onlyAvailable)
+                    .Where(d => d.Exclude == false)
+                    .Where(d => d.isDeleted == false)
+                    .ToListAsync();
 
                 return foundDishes;
             }

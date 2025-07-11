@@ -371,10 +371,10 @@ public partial class MainWindow : Window
     //    MessageBox.Show("Done!");
     //}
 
-    private async void btnManageOrder_Click(object sender, RoutedEventArgs e, IEnumerable<Order> orders2, IEnumerable<Order> orders)
+    private async void btnManageOrder_Click(object sender, RoutedEventArgs e)
     {
-        OrderManagement orderManagement = new(new GenericDataService<Order>(new RestaurantContextFactory()));
-        var _orders = await orderManagement.GetActiveOrders();
+        OrderDataService orderService = new(new GenericDataService<Order>(new RestaurantContextFactory()));
+        var _orders = await orderService.GetActiveOrders();
         if (_orders != null)
         {
             foreach (var order in _orders)
@@ -622,8 +622,8 @@ public partial class MainWindow : Window
 
     private async void GetActiveOrdersAsync()
     {
-        OrderManagement orderManagement = new(new GenericDataService<Order>(new RestaurantContextFactory()));
-        var pendingOrders = await orderManagement.GetActiveOrders();
+        OrderDataService orderService = new(new GenericDataService<Order>(new RestaurantContextFactory()));
+        var pendingOrders = await orderService.GetActiveOrders();
         //pendingOrders = await filtrujListę(pendingOrders, o => o.Status.Name == "Placed" || o.Status.Name == "In progress" || o.Status.Name == "Accepted");
         //"Placed", "Rejected", "In progress", "Done", "Served", "Cancelled"
         lbxPendingOrders.Items.Clear();
@@ -694,10 +694,10 @@ public partial class MainWindow : Window
 
     private async void btnRefreshMenu_Click(object sender, RoutedEventArgs e)
     {
-        GenericDataService<Dish> dishService = new(new RestaurantContextFactory());
+        DishDataService dishService = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
         lbxMenu.Items.Clear();
         lbxMenu.SelectedItem = null;
-        var all_dishes = await dishService.GetAll();
+        var all_dishes = await dishService.GetAllDishes(true);
         foreach (var dish in all_dishes)
         {
             if (!dish.Exclude)
@@ -818,8 +818,8 @@ public partial class MainWindow : Window
         Order selectedOrder = await orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0]));
         if (selectedOrder != null)
         {
-            StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
-            selectedOrder.StatusId = await statusManagement.GetStatusIdByName("In progress");
+            StatusDataService statusService = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
+            selectedOrder.StatusId = await statusService.GetStatusIdByName("In progress");
             if(MessageBox.Show("Accept?", "Question", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 orderService.Update(selectedOrder.Id, selectedOrder);
@@ -827,7 +827,6 @@ public partial class MainWindow : Window
             }
             else
             {
-
                 MessageBox.Show("Operation cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             GetActiveOrdersAsync(); // Refresh the list of active orders
@@ -849,8 +848,8 @@ public partial class MainWindow : Window
         Order selectedOrder = await orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0]));
         if (selectedOrder != null)
         {
-            StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
-            selectedOrder.StatusId = await statusManagement.GetStatusIdByName("Rejected");
+            StatusDataService statusService = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
+            selectedOrder.StatusId = await statusService.GetStatusIdByName("Rejected");
             if (MessageBox.Show("Reject?", "Question", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 orderService.Update(selectedOrder.Id, selectedOrder);
@@ -880,8 +879,8 @@ public partial class MainWindow : Window
         Order selectedOrder = await orderService.Get(Convert.ToInt32(lbxPendingOrders.SelectedItem.ToString().Split(' ')[0]));
         if (selectedOrder != null)
         {
-            StatusManagement statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
-            selectedOrder.StatusId = await statusManagement.GetStatusIdByName("Cancelled");
+            StatusDataService statusService = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
+            selectedOrder.StatusId = await statusService.GetStatusIdByName("Cancelled");
             if (MessageBox.Show("Cancell?", "Question", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 orderService.Update(selectedOrder.Id, selectedOrder);

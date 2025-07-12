@@ -22,8 +22,6 @@ namespace restauracja_wpf;
 
 public partial class MainWindow : Window
 {
-    private User loggedUser;
-
     public MainWindow()
     {
         InitializeComponent();
@@ -77,6 +75,34 @@ public partial class MainWindow : Window
         cmbChangeDishAvaibility.Items.Add("Not Available");
     }
 
+    //private method to clear all inputs and lists in the window
+    private void ClearInputs()
+    {
+        txtFirstname.Clear();
+        txtLastname.Clear();
+        txtUsername.Clear();
+        txtPassword.Clear();
+        txtConfirmPassword.Clear();
+        cmbRole.SelectedIndex = 0;
+        ckbEnabled.IsChecked = false;
+        txtDishName.Clear();
+        txtDishPrice.Clear();
+        cmbDishAvaibility.SelectedIndex = 0;
+        txtSeconds.Clear();
+        txtMinutes.Clear();
+        lbxUserSearchResults.Items.Clear();
+        lbxDishSearchResults.Items.Clear();
+        lbxOrder.Items.Clear();
+        lbxMenu.Items.Clear();
+        txtSearchUser.Clear();
+        txtSearchDish.Clear();
+        txtTotalPrice.Text = "0,00 zł";
+        txtChangeDishName.Clear();
+        txtChangeDishPrice.Clear();
+        txtChangeDishMinutes.Clear();
+        txtChangeDishSeconds.Clear();
+    }
+
     private void btnAddUser_Click(object sender, RoutedEventArgs e)
     {
         if (txtFirstname.Text.IsNullOrEmpty() || txtLastname.Text.IsNullOrEmpty() ||
@@ -92,11 +118,11 @@ public partial class MainWindow : Window
             MessageBox.Show("Passwords do not match.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return; // throw new Exception("Passwords do not match.");
         }
-        else if (cmbRestaurant.SelectedValue == null)
-        {
-            MessageBox.Show("Please select a restaurant.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return; // throw new Exception("Please select a restaurant.");
-        }
+        //else if (cmbRestaurant.SelectedValue == null)
+        //{
+        //    MessageBox.Show("Please select a restaurant.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    return; // throw new Exception("Please select a restaurant.");
+        //}
         else if (cmbRole.SelectedValue == null)
         {
             MessageBox.Show("Please select a role.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -107,7 +133,7 @@ public partial class MainWindow : Window
         string lastname = txtLastname.Text;
         string login = txtUsername.Text;
         string password = txtPassword.Password;
-        string restaurant = cmbRestaurant.Text;
+        //string restaurant = cmbRestaurant.Text;
         string role = cmbRole.Text;
         bool status = ckbEnabled.IsChecked == true ? true : false;
 
@@ -117,7 +143,7 @@ public partial class MainWindow : Window
             $"Login: {login}\n" +
             $"Password: {password}\n" +
             $"Role: {role}\n" +
-            $"Restaurant: {restaurant}\n" +
+            //$"Restaurant: {restaurant}\n" +
             $"Status (enabled?): {status}", "Confirm User Creation", MessageBoxButton.OKCancel, MessageBoxImage.Question);
 
         if (messageBoxResult == MessageBoxResult.OK)
@@ -128,7 +154,7 @@ public partial class MainWindow : Window
                 lastname,
                 login,
                 password,
-                restaurant,
+                null!,
                 role,
                 status
                 );
@@ -562,8 +588,42 @@ public partial class MainWindow : Window
         try
         {
             UserDataService userService = new(new GenericDataService<User>(new RestaurantContextFactory()));
-            loggedUser = await userService.Login(txtLogin.Text, txtLoginPassword.Password);
-            txtbLoginInfo.Text = $"Logged in as: {loggedUser.FirstName} {loggedUser.LastName} ({loggedUser.Role.Name})";
+            User loggedUser = await userService.Login(txtLogin.Text, txtLoginPassword.Password);
+
+            txtLogin.IsEnabled = false;
+            txtLoginPassword.IsEnabled = false;
+            btnLogIn.IsEnabled = false;
+            btnLogOut.Visibility = Visibility.Visible;
+
+            SessionManager.CurrentUser = loggedUser;
+
+            if(SessionManager.CurrentUser.Role.Name == "Admin")
+            {
+                tabMain.Visibility = Visibility.Visible;
+                tabDishManagement.Visibility = Visibility.Visible;
+                tabUserManagement.Visibility = Visibility.Visible;
+                btnAcceptOrder.Visibility = Visibility.Visible;
+                btnRejectOrder.Visibility = Visibility.Visible;
+            }
+            else if (SessionManager.CurrentUser.Role.Name == "Chef")
+            {
+                tabMain.Visibility = Visibility.Visible;
+                tabDishManagement.Visibility = Visibility.Visible;
+                tabUserManagement.Visibility = Visibility.Collapsed;
+                btnAcceptOrder.Visibility = Visibility.Visible;
+                btnRejectOrder.Visibility = Visibility.Visible;
+            }
+            else if (SessionManager.CurrentUser.Role.Name == "Waiter")
+            {
+                tabMain.Visibility = Visibility.Visible;
+                tabDishManagement.Visibility = Visibility.Collapsed;
+                tabUserManagement.Visibility = Visibility.Collapsed;
+                btnAcceptOrder.Visibility = Visibility.Collapsed;
+                btnRejectOrder.Visibility = Visibility.Collapsed;
+            }
+
+
+            txtbLoginInfo.Text = $"Logged in as: {loggedUser.FirstName} {loggedUser.LastName}";
         }
         catch (Exception ex)
         {
@@ -897,5 +957,25 @@ public partial class MainWindow : Window
         {
             MessageBox.Show("Selected order not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+    }
+
+    private void btnLogOut_Click(object sender, RoutedEventArgs e)
+    {
+        SessionManager.CurrentUser = null!;
+        txtLogin.IsEnabled = true;
+        txtLoginPassword.IsEnabled = true;
+        btnLogIn.IsEnabled = true;
+        btnLogOut.Visibility = Visibility.Collapsed;
+
+        tabMain.Visibility = Visibility.Collapsed;
+        tabDishManagement.Visibility = Visibility.Collapsed;
+        tabUserManagement.Visibility = Visibility.Collapsed;
+
+        App.Current.MainWindow.DataContext = new object();  // dummy update
+        App.Current.MainWindow.DataContext = SessionManager.CurrentUser;
+
+        ClearInputs();
+
+        txtbLoginInfo.Text = "Logged out successfully.";
     }
 }

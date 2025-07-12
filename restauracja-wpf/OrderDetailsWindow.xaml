@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:restauracja_wpf"
         mc:Ignorable="d"
-        Title="Szczegóły zamówienia" Height="500" Width="400" ResizeMode="NoResize">
+        Title="Szczegóły zamówienia" Height="550" Width="400" ResizeMode="NoResize">
     <Grid>
         <StackPanel>
             <ListBox Name="OrderListBox" Margin="10" Height="360"/>

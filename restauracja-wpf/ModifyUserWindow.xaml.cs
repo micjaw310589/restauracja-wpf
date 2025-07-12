@@ -35,8 +35,8 @@ namespace restauracja_wpf
             txtLastname.Text = user.LastName;
             txtLogin.Text = user.Login;
             FillUpComboboxAsync();
-            cmbRole.SelectedValue = user.RoleId;  // selected value sie zmienia, ale combobox nie ??????
-            cmbRestaurant.SelectedValue = user.RestaurantId;   // selected value sie zmienia, ale combobox nie ??????
+            cmbRole.SelectedValue = user.RoleId;
+            cmbRestaurant.SelectedValue = user.RestaurantId;
             ckbEnabled.IsChecked = user.Status;
         }
 

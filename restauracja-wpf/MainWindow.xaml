@@ -3,11 +3,46 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:restauracja_wpf"
+        xmlns:local="clr-namespace:restauracja_wpf" xmlns:local1="clr-namespace:restauracja_wpf.Converters"
         mc:Ignorable="d"
         Title="Jem-To-Dobre Panel zarządzania" Height="600" Width="700" MinWidth="700" MinHeight="600">
+
+    <!--<Window.Resources>
+        <local1:RoleToVisibilityConverter x:Key="AdminOnly" RequiredRole="Admin"/>
+        <local1:RoleToVisibilityConverter x:Key="ChefOnly" RequiredRole="Chef"/>
+        <local1:RoleToVisibilityConverter x:Key="WaiterOnly" RequiredRole="Waiter"/>
+    </Window.Resources>--><!--<Window.Resources>
+        <local1:RoleToVisibilityConverter x:Key="AdminOnly" RequiredRole="Admin"/>
+        <local1:RoleToVisibilityConverter x:Key="ChefOnly" RequiredRole="Chef"/>
+        <local1:RoleToVisibilityConverter x:Key="WaiterOnly" RequiredRole="Waiter"/>
+    </Window.Resources>-->
+
+
     <Grid>
         <TabControl>
+            <TabItem x:Name="tabLogin" Header="Log In" >
+                <Grid x:Name="txtLogin1">
+                    <Grid.ColumnDefinitions>
+
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Login:" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" FontSize="16" Margin="25,0,0,0" Grid.Column="0" Height="32" Width="54"/>
+                    <Label Content="Password:" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" FontSize="16" Margin="12,0,0,0" Grid.Column="0" Height="31" Width="80"/>
+                    <TextBox x:Name="txtLogin" FontSize="16" Grid.Row="1" Grid.Column="1" Margin="10,5,100,5"/>
+                    <PasswordBox x:Name="txtLoginPassword" FontSize="16" Grid.Row="2" Grid.Column="1" Margin="10,5,100,5"/>
+                    <Button x:Name="btnLogIn" Grid.Column="1" Content="Log In" Grid.Row="3" Margin="10, 10, 300, 10" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="btnLogIn_Click"/>
+                    <TextBlock x:Name="txtbLoginInfo" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="4" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="240" FontSize="14"/>
+                    <Button x:Name="btnLogOut" Grid.Column="1" Content="Log Out" Grid.Row="4" Margin="56,55,254,104" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Visibility="Collapsed" Click="btnLogOut_Click"/>
+                </Grid>
+            </TabItem>
             <TabItem x:Name="tabMain" Header="Main Page">
                 <Grid x:Name="gridMainPage" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
@@ -19,16 +54,11 @@
                         <ListBox x:Name="lbxPendingOrders" Height="369" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="OnSelected" MouseDoubleClick="lbxPendingOrders_MouseDoubleClick"/>
                         <Label/>
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btnNewOrder" Content="New Order" Click="btnNewOrder_Click"/>
-                            <Label/>
-                            <Button x:Name="btnAcceptOrder" Content="Accept" Click="btnAcceptOrder_Click"/>
-                            <Label/>
-                            <Button x:Name="btnRejectOrder" Content="Reject" Click="btnRejectOrder_Click"/>
-                            <Label/>
-                            <Button x:Name="btnCancelOrder" Content="Cancel" Click="btnCancelOrder_Click"/>
-                            <Label/>
-                            <Button x:Name="btnRefreshOrders" Content="Refresh" Click="btnRefreshOrders_Click"/>
-                            <Label/>
+                            <Button x:Name="btnNewOrder" Content="New Order" Click="btnNewOrder_Click" Margin="10, 0, 5, 0"/>
+                            <Button x:Name="btnAcceptOrder" Content="Accept" Click="btnAcceptOrder_Click" Margin="5, 0, 5, 0"/>
+                            <Button x:Name="btnRejectOrder" Content="Reject" Click="btnRejectOrder_Click" Margin="5, 0, 5, 0"/>
+                            <Button x:Name="btnCancelOrder" Content="Cancel" Click="btnCancelOrder_Click" Margin="5, 0, 5, 0"/>
+                            <Button x:Name="btnRefreshOrders" Content="Refresh" Click="btnRefreshOrders_Click" Margin="5, 0, 5, 0"/>
                             <!--<Button x:Name="btnSetNewOrdersInDB" Content="Set Statuses DB" Click="btnSetNewOrdersInDB_Click" Visibility="Collapsed"/>-->
 
                         </StackPanel>
@@ -63,29 +93,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabLogin" Header="Log In">
-                <Grid x:Name="txtLogin1">
-                    <Grid.ColumnDefinitions>
-
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="5*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition Height="3*"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="Login:" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" FontSize="16" Margin="25,0,0,0" Grid.Column="0" Height="32" Width="54"/>
-                    <Label Content="Password:" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Center" FontSize="16" Margin="12,0,0,0" Grid.Column="0" Height="31" Width="80"/>
-                    <TextBox x:Name="txtLogin" FontSize="16" Grid.Row="1" Grid.Column="1" Margin="10,5,100,5"/>
-                    <PasswordBox x:Name="txtLoginPassword" FontSize="16" Grid.Row="2" Grid.Column="1" Margin="10,5,100,5"/>
-                    <Button x:Name="btnLogIn" Grid.Column="1" Content="Log In" Grid.Row="3" Margin="10, 10, 300, 10" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="btnLogIn_Click"/>
-                    <TextBlock x:Name="txtbLoginInfo" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="4" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="240" FontSize="14"/>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="tabUserManagement" Header="Users" Height="22" Margin="-2,0,-2,0" VerticalAlignment="Bottom">
+            <TabItem x:Name="tabUserManagement" Header="Users" Height="22" Margin="-2,0,-2,0" VerticalAlignment="Bottom" Visibility="Collapsed">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -107,12 +115,12 @@
                                 <PasswordBox x:Name="txtConfirmPassword" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
                                 <Label Content="Role:"/>
                                 <ComboBox x:Name="cmbRole" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding}"/>
-                                <Label Content="Restaurant:"/>
-                                <ComboBox x:Name="cmbRestaurant" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding}"/>
+                                <Label Content="Restaurant:" Visibility="Collapsed"/>
+                                <ComboBox x:Name="cmbRestaurant" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding}" Visibility="Collapsed"/>
                                 <Label></Label>
                                 <CheckBox x:Name="ckbEnabled" IsChecked="True" Content="Account Enabled" />
                                 <Label></Label>
-                                <Button x:Name="btnAddUser" Content="Add User" Click="btnAddUser_Click"/>
+                                <Button x:Name="btnAddUser" Content="Add User" Click="btnAddUser_Click" />
                             </StackPanel>
                         </ScrollViewer>
                     </GroupBox>
@@ -200,6 +208,7 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
+            <!-- zarządzanie restauracjami :: niedokończone -->
             <TabItem x:Name="tabRestaurantManagement" Header="Restaurants" Visibility="Collapsed">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
@@ -248,7 +257,7 @@
                         </ScrollViewer>
                     </GroupBox>
                 </Grid>
-            </TabItem>
+            </TabItem> 
         </TabControl>
     </Grid>
 </Window>

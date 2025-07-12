@@ -11,9 +11,13 @@
 
   <ItemGroup>
     <Compile Remove="Nowy folder\**" />
+    <Compile Remove="View\**" />
     <EmbeddedResource Remove="Nowy folder\**" />
+    <EmbeddedResource Remove="View\**" />
     <None Remove="Nowy folder\**" />
+    <None Remove="View\**" />
     <Page Remove="Nowy folder\**" />
+    <Page Remove="View\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,11 +32,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="View\" />
   </ItemGroup>
 
 </Project>

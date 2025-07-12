@@ -26,6 +26,20 @@ namespace restauracja_wpf
         public OrderDetailsWindow()
         {
             InitializeComponent();
+
+            if (SessionManager.CurrentUser.Role.Name == "Chef" || SessionManager.CurrentUser.Role.Name == "Admin")
+            {
+                btnTakeawayOrder.Visibility = Visibility.Visible;
+                btnAcceptOrder_Kopiuj.Visibility = Visibility.Visible;
+                btnRejectOrder.Visibility = Visibility.Visible;
+            }
+            else if (SessionManager.CurrentUser.Role.Name == "Waiter")
+            {
+                btnTakeawayOrder.Visibility = Visibility.Collapsed;
+                btnAcceptOrder_Kopiuj.Visibility = Visibility.Collapsed;
+                btnRejectOrder.Visibility = Visibility.Collapsed;
+            }
+
         }
 
         public OrderDetailsWindow(Order order) : this()

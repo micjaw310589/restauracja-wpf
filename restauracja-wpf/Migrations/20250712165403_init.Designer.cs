@@ -12,7 +12,7 @@ using restauracja_wpf.Data;
 namespace restauracja_wpf.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    [Migration("20250629163939_init")]
+    [Migration("20250712165403_init")]
     partial class init
     {
         /// <inheritdoc />

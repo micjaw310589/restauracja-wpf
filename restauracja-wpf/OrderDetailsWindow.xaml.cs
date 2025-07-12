@@ -59,7 +59,7 @@ namespace restauracja_wpf
             OrderListBox.Items.Clear();
             foreach (var order in orderDetails)
             {
-                OrderListBox.Items.Add($"{order.Id} - {order.Status} - {order.DeliveryNumber}");
+                OrderListBox.Items.Add($"{order.Id} - {order.Status.Name} - {order.DeliveryNumber}");
                 foreach (var item in order.DishOrders)
                 {
                     if (item == null || item.Dish == null)

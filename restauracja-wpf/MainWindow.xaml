@@ -43,7 +43,7 @@
                     <Button x:Name="btnLogOut" Grid.Column="1" Content="Log Out" Grid.Row="4" Margin="56,55,254,104" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Visibility="Collapsed" Click="btnLogOut_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabMain" Header="Main Page">
+            <TabItem x:Name="tabMain" Header="Main Page" Visibility="Collapsed">
                 <Grid x:Name="gridMainPage" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -138,7 +138,7 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabDishManagement" HorizontalAlignment="Left" Height="22" Header="Menu" VerticalAlignment="Center">
+            <TabItem x:Name="tabDishManagement" HorizontalAlignment="Left" Height="22" Header="Menu" VerticalAlignment="Center" Visibility="Collapsed">
                 <Grid x:Name="DishManagement" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

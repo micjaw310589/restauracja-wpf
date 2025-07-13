@@ -28,6 +28,7 @@ public partial class MainWindow : Window
 
         FillUpComboBoxAsync();
         GetActiveOrdersAsync();
+        RefreshMenu();
     }
 
     private void PreviewNumericInput(object sender, TextCompositionEventArgs e)
@@ -678,6 +679,7 @@ public partial class MainWindow : Window
 
         //REFRESH ACTIVE ORDERS
         GetActiveOrdersAsync();
+        RefreshMenu();
     }
 
     private async void GetActiveOrdersAsync()
@@ -693,6 +695,20 @@ public partial class MainWindow : Window
             int dish_count = order.DishOrders.Sum(dishOrder => dishOrder.Quantity);
             decimal sum = order.DishOrders.Sum(dishOrder => dishOrder.PurchasePrice);
             lbxPendingOrders.Items.Add($"{order.Id} - Status: {order.Status.Name} - {order.OrderDate} - Dania: {order.DishOrders.Count} - Cena: {sum} zł");
+        }
+    }
+    private async void RefreshMenu()
+    {
+        DishDataService dishService = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
+        var all_dishes = await dishService.GetAllDishes(true);
+        lbxMenu.Items.Clear();
+        lbxMenu.SelectedItem = null;
+        foreach (var dish in all_dishes)
+        {
+            if (!dish.Exclude)
+            {
+                lbxMenu.Items.Add($"{dish.Id} - {dish.Name} - {dish.Price} zł - (ToS: {dish.TimeConstant})");
+            }
         }
     }
 
@@ -754,17 +770,7 @@ public partial class MainWindow : Window
 
     private async void btnRefreshMenu_Click(object sender, RoutedEventArgs e)
     {
-        DishDataService dishService = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
-        lbxMenu.Items.Clear();
-        lbxMenu.SelectedItem = null;
-        var all_dishes = await dishService.GetAllDishes(true);
-        foreach (var dish in all_dishes)
-        {
-            if (!dish.Exclude)
-            {
-                lbxMenu.Items.Add($"{dish.Id} - {dish.Name} - {dish.Price} zł - (ToS: {dish.TimeConstant})");
-            }
-        }
+        RefreshMenu();
     }
 
     private void btnRemoveFromOrder_Click(object sender, RoutedEventArgs e)

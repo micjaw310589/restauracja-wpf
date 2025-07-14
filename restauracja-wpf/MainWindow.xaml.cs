@@ -17,6 +17,7 @@ using restauracja_wpf.Services;
 using System.Text.RegularExpressions;
 using restauracja_wpf.Interfaces;
 using System.Diagnostics.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace restauracja_wpf;
 
@@ -56,18 +57,22 @@ public partial class MainWindow : Window
 
     private async void FillUpComboBoxAsync()        // wip
     {
-        GenericDataService<Role> roleService = new GenericDataService<Role>(new RestaurantContextFactory());
-        cmbRole.ItemsSource = await roleService.GetAll();
+        RoleDataService roleService = new(new GenericDataService<Role>(new RestaurantContextFactory()));
+        if (SessionManager.CurrentUser != null && SessionManager.CurrentUser.Role.Name == "root")
+            cmbRole.ItemsSource = await roleService.GetAllRoles(true);
+        else
+            cmbRole.ItemsSource = await roleService.GetAllRoles();
+
         cmbRole.DisplayMemberPath = "Name";
         cmbRole.SelectedValuePath = "Id";
         cmbRole.SelectedIndex = 0;
          
-        // docelowo zamienić na wyszukiwanie restauracji po nazwie
-        GenericDataService<Restaurant> restaurantService = new GenericDataService<Restaurant>(new RestaurantContextFactory());
-        cmbRestaurant.ItemsSource = await restaurantService.GetAll();
-        cmbRestaurant.DisplayMemberPath = "Name";
-        cmbRestaurant.SelectedValuePath = "Id";
-        cmbRestaurant.SelectedIndex = 0;
+        //// docelowo zamienić na wyszukiwanie restauracji po nazwie
+        //GenericDataService<Restaurant> restaurantService = new GenericDataService<Restaurant>(new RestaurantContextFactory());
+        //cmbRestaurant.ItemsSource = await restaurantService.GetAll();
+        //cmbRestaurant.DisplayMemberPath = "Name";
+        //cmbRestaurant.SelectedValuePath = "Id";
+        //cmbRestaurant.SelectedIndex = 0;
 
         // DISHES
         cmbDishAvaibility.Items.Add("Available");
@@ -104,7 +109,7 @@ public partial class MainWindow : Window
         txtChangeDishSeconds.Clear();
     }
 
-    private void btnAddUser_Click(object sender, RoutedEventArgs e)
+    private async void btnAddUser_Click(object sender, RoutedEventArgs e)
     {
         if (txtFirstname.Text.IsNullOrEmpty() || txtLastname.Text.IsNullOrEmpty() ||
             txtUsername.Text.IsNullOrEmpty() || txtPassword.Password.IsNullOrEmpty() ||
@@ -138,18 +143,25 @@ public partial class MainWindow : Window
         string role = cmbRole.Text;
         bool status = ckbEnabled.IsChecked == true ? true : false;
 
+        UserDataService userService = new(new GenericDataService<User>(new RestaurantContextFactory()));
+        var usernameTaken = await userService.IsUsernameTaken(login);
+
+        if (usernameTaken)
+        {
+            MessageBox.Show("This username is already taken. Please choose a different one.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return; // throw new Exception("This login is already taken.");
+        }
+
         var messageBoxResult = MessageBox.Show($"Confirm User creation:\n" +
             $"Firstname: {firstname}\n" +
             $"Lastname: {lastname}\n" +
             $"Login: {login}\n" +
-            $"Password: {password}\n" +
             $"Role: {role}\n" +
             //$"Restaurant: {restaurant}\n" +
             $"Status (enabled?): {status}", "Confirm User Creation", MessageBoxButton.OKCancel, MessageBoxImage.Question);
 
         if (messageBoxResult == MessageBoxResult.OK)
         {
-            UserDataService userService = new(new GenericDataService<User>(new RestaurantContextFactory()));
             userService.CreateUser(
                 firstname,
                 lastname,
@@ -229,24 +241,41 @@ public partial class MainWindow : Window
 
         string name = txtDishName.Text;
         decimal price = stringToPrice(txtDishPrice.Text);
-        bool avaibility = (cmbDishAvaibility.Text=="Available")? true : false;
+        bool availability = (cmbDishAvaibility.Text == "Available") ? true : false;
         TimeSpan timeSpan = new TimeSpan(0, Convert.ToInt32(txtMinutes.Text), Convert.ToInt32(txtSeconds.Text));
+
+        DishDataService dishService = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
+        var dishNameTaken = await dishService.IsDishNameTaken(name);
+
+        if (dishNameTaken)
+        {
+            MessageBox.Show("This dish name is already taken. Create a new dish or change the existing one.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return; // throw new Exception("This login is already taken.");
+        }
 
         var messageBoxResult = MessageBox.Show($"Confirm Dish creation:\n" +
             $"Dish name: {name}\n" +
             $"Price: {price}\n" +
-            $"Avaibility: {avaibility}\n" +
+            $"Avaibility: {availability}\n" +
             $"Time to make (hh:mm:ss): {timeSpan}\n", "Confirm", MessageBoxButton.OKCancel, MessageBoxImage.Question);
 
-        if (messageBoxResult == MessageBoxResult.OK)
+        try
         {
-            DishDataService dishService = new(new GenericDataService<Dish>(new RestaurantContextFactory()));
-            dishService.AddDish(
-                name,
-                price,
-                avaibility,
-                timeSpan
-                );
+            if (messageBoxResult == MessageBoxResult.OK)
+            {
+                dishService.Create(new Dish()
+                {
+                    Name = name,
+                    Price = price,
+                    Available = availability,
+                    TimeConstant = timeSpan
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error adding dish: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return; // throw new Exception("Error adding dish.");
         }
     }
 
@@ -283,7 +312,7 @@ public partial class MainWindow : Window
         lbxDishSearchResults.SelectedItem = null;
         foreach (var dish in dishes)
         {
-            lbxDishSearchResults.Items.Add($"{dish.Id} {dish.Name} {dish.Price}$ (avaibility: {dish.Available})");
+            lbxDishSearchResults.Items.Add($"{dish.Id} {dish.Name} {dish.Price} zł (avaibility: {dish.Available})");
         }
     }
 
@@ -598,7 +627,7 @@ public partial class MainWindow : Window
 
             SessionManager.CurrentUser = loggedUser;
 
-            if(SessionManager.CurrentUser.Role.Name == "Admin")
+            if(SessionManager.CurrentUser.Role.Name == "Admin" || SessionManager.CurrentUser.Role.Name == "root")
             {
                 tabMain.Visibility = Visibility.Visible;
                 tabDishManagement.Visibility = Visibility.Visible;

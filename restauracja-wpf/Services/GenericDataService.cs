@@ -33,7 +33,6 @@ namespace restauracja_wpf.Services
         {
             using (RestaurantContext context = _contextfactory.CreateDbContext())
             {
-                // Soft delete implementation
                 T entity = await context.Set<T>().FirstOrDefaultAsync((e) => e.Id == id);
                 entity.isDeleted = true;
                 context.Set<T>().Update(entity);

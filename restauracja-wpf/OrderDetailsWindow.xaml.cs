@@ -27,7 +27,7 @@ namespace restauracja_wpf
         {
             InitializeComponent();
 
-            if (SessionManager.CurrentUser.Role.Name == "Chef" || SessionManager.CurrentUser.Role.Name == "Admin")
+            if (SessionManager.CurrentUser.Role.Name == "Chef" || SessionManager.CurrentUser.Role.Name == "Admin" || SessionManager.CurrentUser.Role.Name == "root")
             {
                 btnTakeawayOrder.Visibility = Visibility.Visible;
                 btnAcceptOrder_Kopiuj.Visibility = Visibility.Visible;
@@ -55,7 +55,7 @@ namespace restauracja_wpf
                 return;
             }
             OrderDataService orderService = new(new GenericDataService<Order>(new RestaurantContextFactory()));
-            IEnumerable<Order> orderDetails = await orderService.GetOrderDetails(order1.Id);
+            IEnumerable<Order> orderDetails = await orderService.GetOrder(order1.Id);
             OrderListBox.Items.Clear();
             foreach (var order in orderDetails)
             {

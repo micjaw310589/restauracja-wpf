@@ -21,8 +21,8 @@
                 <PasswordBox x:Name="txtConfirmChangePassword" Width="120" HorizontalAlignment="Left" MaxLength="30"/>
                 <Label Content="Role:"/>
                 <ComboBox x:Name="cmbRole" Width="120" HorizontalAlignment="Left"/>
-                <Label Content="Restaurant:"/>
-                <ComboBox x:Name="cmbRestaurant" Width="120" HorizontalAlignment="Left"/>
+                <Label Content="Restaurant:" Visibility="Collapsed"/>
+                <ComboBox x:Name="cmbRestaurant" Width="120" HorizontalAlignment="Left" Visibility="Collapsed"/>
                 <Label></Label>
                 <CheckBox x:Name="ckbEnabled" IsChecked="True" Content="Account Enabled" />
                 <Label></Label>

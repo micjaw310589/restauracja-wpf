@@ -24,11 +24,17 @@ namespace restauracja_wpf.Interfaces
             }
         }
 
-        public async Task<IEnumerable<Role>> GetAllRoles()
+        public async Task<IEnumerable<Role>> GetAllRoles(bool withRootAndAdmin = false)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
                 IEnumerable<Role> roles = await context.Set<Role>().ToListAsync();
+
+                if (!withRootAndAdmin)
+                    roles = roles.Where(e => !e.isDeleted).Where(e => e.Name != "root" && e.Name != "Admin");
+                else
+                    roles = roles.Where(e => !e.isDeleted);
+
                 return roles;
             }
         }
@@ -38,6 +44,7 @@ namespace restauracja_wpf.Interfaces
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
                 Role role = await context.Set<Role>()
+                    .Where(e => !e.isDeleted)
                     .FirstOrDefaultAsync(r => r.Name.Contains(name));
                 return role;
             }

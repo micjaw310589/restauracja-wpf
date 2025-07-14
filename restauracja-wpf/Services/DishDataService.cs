@@ -11,19 +11,19 @@ namespace restauracja_wpf.Services
 {
     public class DishDataService(GenericDataService<Dish> dishService) : GenericDataService<Dish>(new RestaurantContextFactory())
     {
-        public async void AddDish(string name, decimal price, bool avaibility, TimeSpan time)
-        {
-            using (var context = new RestaurantContextFactory().CreateDbContext())
-            {
-                await dishService.Create(new Dish()
-                {
-                    Name = name,
-                    Price = price,
-                    Available = avaibility,
-                    TimeConstant = time
-                });
-            }
-        }
+        //public async void AddDish(string name, decimal price, bool avaibility, TimeSpan time)
+        //{
+        //    using (var context = new RestaurantContextFactory().CreateDbContext())
+        //    {
+        //        await dishService.Create(new Dish()
+        //        {
+        //            Name = name,
+        //            Price = price,
+        //            Available = avaibility,
+        //            TimeConstant = time
+        //        });
+        //    }
+        //}
 
         public async Task<IEnumerable<Dish>> GetDishesByName(string name)
         {
@@ -31,7 +31,7 @@ namespace restauracja_wpf.Services
             {
                 IEnumerable<Dish> foundDishes = await context.Set<Dish>()
                     .Where(d => d.Name.Contains(name))
-                    .Where(d => d.isDeleted == false)
+                    .Where(d => !d.isDeleted)
                     .ToListAsync();
                 return foundDishes;
             }
@@ -45,11 +45,27 @@ namespace restauracja_wpf.Services
 
                 foundDishes = await context.Set<Dish>()
                     .Where(d => d.Available == onlyAvailable)
-                    .Where(d => d.Exclude == false)
-                    .Where(d => d.isDeleted == false)
+                    .Where(d => !d.Exclude)
+                    .Where(d => !d.isDeleted)
                     .ToListAsync();
 
                 return foundDishes;
+            }
+        }
+
+        public async Task<bool> IsDishNameTaken(string dish_name)
+        {
+            using (var context = new RestaurantContextFactory().CreateDbContext())
+            {
+                Dish foundDish = null!;
+                foundDish = await context.Menu
+                    .Where(d => !d.isDeleted)
+                    .Where(d => d.Name.Equals(dish_name))
+                    .FirstOrDefaultAsync();
+
+                bool dishNameTaken = foundDish != null;
+
+                return dishNameTaken;
             }
         }
 

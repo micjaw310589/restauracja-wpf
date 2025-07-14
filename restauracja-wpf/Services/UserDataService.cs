@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using restauracja_wpf.Data;
 using restauracja_wpf.Models;
 using System;
@@ -19,6 +20,7 @@ namespace restauracja_wpf.Services
             {
                 var user = await context.Users
                     .Include(u => u.Role)
+                    .Where(u => !u.isDeleted)
                     .FirstOrDefaultAsync(u => u.Login == login && u.PasswordHash == password);
                 if (user == null)
                     throw new Exception("Invalid login or password");
@@ -61,7 +63,14 @@ namespace restauracja_wpf.Services
                 User foundUser = await context.Users
                     .Include(u => u.Role)
                     .Include(u => u.Restaurant)
+                    .Where(u => !u.isDeleted)
                     .FirstOrDefaultAsync(u => u.Id == id);
+
+                if (foundUser == null || foundUser.isDeleted)
+                {
+                    throw new KeyNotFoundException($"User not found.");
+                }
+
                 return foundUser;
             }
         }
@@ -73,6 +82,7 @@ namespace restauracja_wpf.Services
                 IEnumerable<User> foundUsers = await context.Users
                     .Include(u => u.Role)
                     .Include(u => u.Restaurant)
+                    .Where(u => !u.isDeleted)
                     .Where(u => u.LastName.Contains(lastname))
                     .ToListAsync();
 
@@ -95,6 +105,25 @@ namespace restauracja_wpf.Services
 
                 await context.SaveChangesAsync();
             }
-        }   
+        }
+
+        public async Task<bool> IsUsernameTaken(string username)
+        {
+            using (var context = new RestaurantContextFactory().CreateDbContext())
+            {
+                User foundUser = null!;
+                foundUser = await context.Users
+                    .Include(u => u.Role)
+                    .Include(u => u.Restaurant)
+                    .Where(u => !u.isDeleted)
+                    .Where(u => u.Login.Equals(username))
+                    .FirstOrDefaultAsync();
+
+                bool usernameTaken = foundUser != null;
+
+                return usernameTaken;
+            }
+        }
+
     }
 }

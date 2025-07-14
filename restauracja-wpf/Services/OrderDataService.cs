@@ -30,13 +30,14 @@ namespace restauracja_wpf.Interfaces
                     .Include(o => o.DishOrders)
                         .ThenInclude(dor => dor.Dish)
                     .Where(o => o.Status.Name.Contains("Placed") || o.Status.Name.Contains("In progress") || o.Status.Name.Contains("Done"))
+                    .Where(o => !o.isDeleted)
                     .ToListAsync();
 
                 return foundOrders;
             }
         }
 
-        public async Task<IEnumerable<Order>> GetOrderDetails(int Id)
+        public async Task<IEnumerable<Order>> GetOrder(int Id)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
@@ -50,6 +51,7 @@ namespace restauracja_wpf.Interfaces
                     .Include(o => o.DishOrders)
                         .ThenInclude(dor => dor.Dish)
                         .Where(o => o.Id == Id)
+                    .Where(o => !o.isDeleted)
                     .ToListAsync();
                 return foundOrders;
             }
@@ -70,6 +72,7 @@ namespace restauracja_wpf.Interfaces
                     .Include(o => o.DishOrders)
                         .ThenInclude(dor => dor.Dish)
                     .Where(o => o.Status.Name.Contains("Rejected") || o.Status.Name.Contains("Cancelled") || o.Status.Name.Contains("Served"))
+                    .Where(o => !o.isDeleted)
                     .ToListAsync();
 
                 return foundOrders;

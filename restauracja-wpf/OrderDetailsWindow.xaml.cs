@@ -101,7 +101,7 @@ namespace restauracja_wpf
                 GenericDataService<Order> orderManagement = new GenericDataService<Order>(new RestaurantContextFactory());
 
                 var statuses = await new GenericDataService<OrderStatus>(new RestaurantContextFactory()).GetAll();
-                var wydaneStatus = statuses.FirstOrDefault(s => s.Name == "In progress");
+                var wydaneStatus = statuses.FirstOrDefault(s => s.Name == "In Progress");
                 order1.StatusId = wydaneStatus.Id;
                 orderManagement.Update(order1.Id, order1);
 
@@ -136,20 +136,18 @@ namespace restauracja_wpf
 
         private async void btnCancelOrder_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Czy chcesz potwierdzić wydanie zamówienia?", "Potwierdź:", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            GenericDataService<Order> orderService = new(new RestaurantContextFactory());
+            StatusDataService statusService = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
+            order1.StatusId = await statusService.GetStatusIdByName("Cancelled");
+            if (MessageBox.Show("Cancell?", "Question", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                GenericDataService<Order> orderManagement = new GenericDataService<Order>(new RestaurantContextFactory());
-
-                var statuses = await new GenericDataService<OrderStatus>(new RestaurantContextFactory()).GetAll();
-                var wydaneStatus = statuses.FirstOrDefault(s => s.Name == "In progress");
-                order1.StatusId = wydaneStatus.Id;
-                orderManagement.Update(order1.Id, order1);
-
-                MessageBox.Show("Order cancelled.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                orderService.Update(order1.Id, order1);
+                MessageBox.Show("Order cancelled successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("Operation cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                MessageBox.Show("Operation cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             this.Close();
         }

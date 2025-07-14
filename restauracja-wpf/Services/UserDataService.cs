@@ -30,14 +30,14 @@ namespace restauracja_wpf.Services
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {
-                var foundRestaurant = await context.Restaurants
-                    .FirstOrDefaultAsync(r => r.Name == restaurant);
+                //var foundRestaurant = await context.Restaurants
+                //    .FirstOrDefaultAsync(r => r.Name == restaurant);
                 var foundRole = await context.Roles
                     .FirstOrDefaultAsync(r => r.Name == role);
 
-                if (foundRestaurant == null)
-                    throw new Exception("Restaurant not found");
-                else if (foundRole == null)
+                //if (foundRestaurant == null)
+                //    throw new Exception("Restaurant not found");
+                if (foundRole == null)
                     throw new Exception("Role not found");
 
                 await userService.Create(new User()
@@ -47,7 +47,8 @@ namespace restauracja_wpf.Services
                     Login = login,
                     PasswordHash = password,
                     RoleId = foundRole.Id,
-                    RestaurantId = foundRestaurant.Id,
+                    RestaurantId = null!,
+                    //RestaurantId = foundRestaurant.Id,
                     Status = status
                 });
             }

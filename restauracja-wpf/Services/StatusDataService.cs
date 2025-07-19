@@ -16,7 +16,7 @@ namespace restauracja_wpf.Interfaces
     public class StatusDataService(GenericDataService<OrderStatus> statusService) : GenericDataService<OrderStatus>(new RestaurantContextFactory())
     {
 
-        private async void AddStatus(string name)
+        public async void AddStatus(string name)
         {
             using (var context = new RestaurantContextFactory().CreateDbContext())
             {

@@ -27,9 +27,44 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
+        PopulateCriticalDbData();
         FillUpComboBoxAsync();
         GetActiveOrdersAsync();
         RefreshMenu();
+    }
+
+    private async void PopulateCriticalDbData()
+    {
+        RoleDataService roleManagement = new(new GenericDataService<Role>(new RestaurantContextFactory()));
+        await roleManagement.ClearRoles();
+        List<string> roles = ["Admin", "Manager", "Waiter", "Cook", "root"];
+        foreach (var r in roles)
+        {
+            roleManagement.AddRole(r);
+        }
+
+        StatusDataService statusManagement = new(new GenericDataService<OrderStatus>(new RestaurantContextFactory()));
+        await statusManagement.ClearAll();
+        List<string> statuses = ["Placed", "Rejected", "In Progress", "Done", "Served", "Cancelled"];
+        foreach (var r in roles)
+        {
+            statusManagement.AddStatus(r);
+        }
+
+        UserDataService userService = new(new GenericDataService<User>(new RestaurantContextFactory()));
+        var rootUser = await userService.GetUserByLastname("root");
+        if (rootUser == null || rootUser.Count() == 0)
+        {
+            userService.CreateUser(
+                "",
+                "root",
+                "root",
+                "root",
+                null!,
+                "root",
+                true
+            );
+        }
     }
 
     private void PreviewNumericInput(object sender, TextCompositionEventArgs e)
